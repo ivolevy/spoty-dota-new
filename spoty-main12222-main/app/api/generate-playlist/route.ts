@@ -135,6 +135,7 @@ export async function POST(request: NextRequest) {
     console.log(`✅ Playlist generada: ${selection.playlistName} con ${tracks.length} canciones`)
     console.log(`📊 RESUMEN:`)
     console.log(`   - Género detectado: ${detectedGenre || "ninguno"}`)
+    console.log(`   - Artistas detectados: ${detectedArtists.length > 0 ? detectedArtists.join(", ") : "ninguno"}`)
     console.log(`   - Tracks sugeridos por OpenAI: ${selection.tracks.length}`)
     console.log(`   - Tracks encontrados en DB: ${tracks.length}`)
     console.log(`   - Requests a Spotify API: 0 (usando Supabase)`)
@@ -145,6 +146,7 @@ export async function POST(request: NextRequest) {
       description: selection.description,
       tracks,
       detectedGenre: detectedGenre || null,
+      detectedArtists: detectedArtists.length > 0 ? detectedArtists : null,
     })
     
   } catch (error) {
