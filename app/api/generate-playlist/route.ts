@@ -74,7 +74,8 @@ export async function POST(request: NextRequest) {
       prompt.trim(),
       "Dale Play Records",
       maxTracksNeeded,
-      detectedArtists.length > 0 ? detectedArtists : undefined
+      detectedArtists.length > 0 ? detectedArtists : undefined,
+      detectedGenre || undefined
     )
 
     if (!selection.tracks || selection.tracks.length === 0) {
