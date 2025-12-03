@@ -3,7 +3,7 @@
  * OpenAI recibe la lista completa de tracks y elige de ahí.
  */
 
-import { supabase } from "./supabase"
+import { supabaseData } from "./supabase-data"
 
 export interface SelectedTrack {
   trackName: string
@@ -30,7 +30,7 @@ interface TrackFromDB {
  */
 async function getAvailableTracks(): Promise<{ trackName: string; artistName: string; genres: string[] }[]> {
   try {
-    const { data, error } = await supabase
+    const { data, error } = await supabaseData
       .from('artist_tracks')
       .select('spotify_id, name, artists, artist_main, genres')
 

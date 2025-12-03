@@ -4,7 +4,7 @@
  */
 
 import type { Track } from "./search-daleplay"
-import { supabase } from "./supabase"
+import { supabaseData } from "./supabase-data"
 
 interface TrackFromDB {
   id: number
@@ -58,7 +58,7 @@ async function findTrackInDB(
 
   try {
     // Primero intentar búsqueda exacta por nombre y artista principal
-    let { data, error } = await supabase
+    let { data, error } = await supabaseData
       .from('artist_tracks')
       .select('*')
       .ilike('name', normalizedTrackName)
@@ -86,7 +86,7 @@ async function findTrackInDB(
 
     // Si no encontramos exacto, buscar por coincidencia parcial en nombre
     // y verificar si alguno de los artistas coincide
-    const { data: partialData, error: partialError } = await supabase
+    const { data: partialData, error: partialError } = await supabaseData
       .from('artist_tracks')
       .select('*')
       .ilike('name', `%${normalizedTrackName}%`)
@@ -199,7 +199,7 @@ export async function searchTracksFromDB(
  */
 export async function getAllTracksFromDB(): Promise<Track[]> {
   try {
-    const { data, error } = await supabase
+    const { data, error } = await supabaseData
       .from('artist_tracks')
       .select('*')
 
