@@ -35,7 +35,9 @@ function normalizeString(str: string): string {
 
 /**
  * Verifica si un track coincide con un género específico
- * Usa coincidencia parcial: "trap" coincide con "argentina trap", "trap latino", etc.
+ * Usa coincidencia inteligente por palabras completas y substrings:
+ * - "rock" coincide con "argentine rock", "rock argentino", "hard rock", "rock", etc.
+ * - "trap" coincide con "argentina trap", "trap latino", "trap", etc.
  */
 function matchesGenre(track: TrackFromDB, genre?: string): boolean {
   if (!genre) return true // Si no hay filtro de género, aceptar todos
@@ -43,12 +45,43 @@ function matchesGenre(track: TrackFromDB, genre?: string): boolean {
   const normalizedGenre = normalizeString(genre)
   const trackGenres = track.genres || []
   
-  // Coincidencia parcial: el género buscado debe estar contenido en alguno de los géneros del track
-  // o viceversa (género del track contenido en el buscado)
+  // Dividir el género buscado en palabras
+  const genreWords = normalizedGenre.split(/\s+/).filter(w => w.length > 0)
+  
   return trackGenres.some(g => {
     const normalizedTrackGenre = normalizeString(g)
-    // Coincide si el género buscado está en el género del track o viceversa
-    return normalizedTrackGenre.includes(normalizedGenre) || normalizedGenre.includes(normalizedTrackGenre)
+    
+    // 1. Coincidencia exacta
+    if (normalizedTrackGenre === normalizedGenre) {
+      return true
+    }
+    
+    // 2. Coincidencia por palabras completas: verificar si alguna palabra del género buscado
+    // está presente como palabra completa en el género del track
+    const trackGenreWords = normalizedTrackGenre.split(/\s+/).filter(w => w.length > 0)
+    const hasMatchingWord = genreWords.some(word => 
+      trackGenreWords.some(trackWord => 
+        trackWord === word || 
+        trackWord.startsWith(word) || 
+        trackWord.endsWith(word) ||
+        word.startsWith(trackWord) ||
+        word.endsWith(trackWord)
+      )
+    )
+    
+    if (hasMatchingWord) {
+      return true
+    }
+    
+    // 3. Coincidencia por substring (para casos como "trap" en "trap latino")
+    // Solo si el substring es significativo (más de 3 caracteres)
+    if (normalizedGenre.length >= 3) {
+      if (normalizedTrackGenre.includes(normalizedGenre) || normalizedGenre.includes(normalizedTrackGenre)) {
+        return true
+      }
+    }
+    
+    return false
   })
 }
 
