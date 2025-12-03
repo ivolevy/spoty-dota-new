@@ -8,18 +8,17 @@ export type Genre = "trap" | "rock" | "pop"
 
 /**
  * Detecta si el prompt menciona algún género musical
- * IMPORTANTE: Si se detecta una actividad (correr, estudiar, trabajar, etc.), NO se filtra por género
+ * Las actividades y géneros pueden coexistir - no son mutuamente excluyentes
  * @param prompt - Texto del prompt del usuario
- * @returns Género detectado o null si no se detecta ninguno o si hay una actividad
+ * @returns Género detectado o null si no se detecta ninguno
  */
 export function detectGenreFromPrompt(prompt: string): Genre | null {
   const normalizedPrompt = prompt.toLowerCase().trim()
   
-  // Si hay una actividad detectada, NO filtrar por género
+  // Las actividades y géneros pueden coexistir - no bloqueamos la detección de género
   const activities = findMatchingActivities(prompt)
   if (activities.length > 0) {
-    console.log(`🎯 Actividad detectada: "${activities[0].actividad}" - No se filtrará por género`)
-    return null
+    console.log(`🎯 Actividad detectada: "${activities[0].actividad}" - También se puede filtrar por género si se menciona`)
   }
   
   // Palabras clave para cada género (ordenadas de más específicas a menos específicas)
