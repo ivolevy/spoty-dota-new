@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server"
 
 const SPOTIFY_CLIENT_ID = process.env.SPOTIFY_CLIENT_ID
-const SPOTIFY_REDIRECT_URI = process.env.SPOTIFY_REDIRECT_URI || "https://spoty-main12222.vercel.app/"
+const SPOTIFY_REDIRECT_URI = process.env.SPOTIFY_REDIRECT_URI || "https://spoty-bydota.app/api/auth/callback"
 const SPOTIFY_SCOPES = [
   "user-read-private",
   "user-read-email",
