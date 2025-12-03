@@ -914,6 +914,30 @@ export default function MetricsPage() {
                     <span className="text-[#1DB954] font-semibold">📊 Diversity score:</span>{" "}
                     {Math.round((metrics.uniqueArtists / metrics.totalTracks) * 100)}% unique artists per track
                   </div>
+                  {exposureMetrics && (
+                    <>
+                      <div className="text-gray-300 text-sm">
+                        <span className="text-[#1DB954] font-semibold">📈 Cobertura de artistas:</span>{" "}
+                        {exposureMetrics.exposure.artistsExposureRate}% del catálogo promocionado
+                      </div>
+                      <div className="text-gray-300 text-sm">
+                        <span className="text-[#1DB954] font-semibold">🎯 Cobertura de tracks:</span>{" "}
+                        {exposureMetrics.exposure.tracksExposureRate}% del catálogo promocionado
+                      </div>
+                    </>
+                  )}
+                  {businessMetrics && (
+                    <>
+                      <div className="text-gray-300 text-sm">
+                        <span className="text-[#1DB954] font-semibold">💰 Total followers alcanzados:</span>{" "}
+                        {businessMetrics.trends.totalFollowersReached.toLocaleString()}
+                      </div>
+                      <div className="text-gray-300 text-sm">
+                        <span className="text-[#1DB954] font-semibold">⚡ Eficiencia de catálogo:</span>{" "}
+                        {businessMetrics.efficiency.catalogEfficiency}% de tracks promocionados
+                      </div>
+                    </>
+                  )}
                 </div>
               </div>
             </>
