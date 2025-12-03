@@ -9,7 +9,7 @@ export const dynamic = 'force-dynamic'
 
 const SPOTIFY_CLIENT_ID = process.env.SPOTIFY_CLIENT_ID
 const SPOTIFY_CLIENT_SECRET = process.env.SPOTIFY_CLIENT_SECRET
-const SPOTIFY_REDIRECT_URI = process.env.SPOTIFY_REDIRECT_URI || "https://spoty-main12222.vercel.app/"
+const SPOTIFY_REDIRECT_URI = (process.env.SPOTIFY_REDIRECT_URI?.trim() || "https://spoty-bydota.vercel.app/api/auth/callback").trim()
 
 export async function GET(request: NextRequest) {
   const searchParams = request.nextUrl.searchParams
