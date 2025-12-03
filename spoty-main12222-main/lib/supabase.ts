@@ -17,12 +17,24 @@ function getSupabaseConfig() {
 function getSupabaseClient(): SupabaseClient {
   const { supabaseUrl, supabaseAnonKey } = getSupabaseConfig()
   
+  // Debug: Log siempre para ver qué valores tenemos
+  console.log('🔍 [Supabase Config] Verificando variables de entorno:')
+  console.log('   - NEXT_PUBLIC_SUPABASE_URL:', process.env.NEXT_PUBLIC_SUPABASE_URL ? 'SET' : 'NOT SET')
+  console.log('   - SUPABASE_URL:', process.env.SUPABASE_URL ? 'SET' : 'NOT SET')
+  console.log('   - NEXT_PUBLIC_SUPABASE_ANON_KEY:', process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ? 'SET' : 'NOT SET')
+  console.log('   - SUPABASE_ANON_KEY:', process.env.SUPABASE_ANON_KEY ? 'SET' : 'NOT SET')
+  console.log('   - supabaseUrl final:', supabaseUrl || 'EMPTY')
+  console.log('   - supabaseAnonKey final:', supabaseAnonKey ? `${supabaseAnonKey.substring(0, 20)}...` : 'EMPTY')
+  console.log('   - NODE_ENV:', process.env.NODE_ENV)
+  console.log('   - VERCEL:', process.env.VERCEL)
+  
   // Si las variables están configuradas, usar valores reales
   if (supabaseUrl && supabaseAnonKey && 
       supabaseUrl !== '' && 
       supabaseAnonKey !== '' &&
       !supabaseUrl.includes('placeholder') &&
       !supabaseAnonKey.includes('placeholder')) {
+    console.log('✅ [Supabase Config] Usando configuración real de Supabase')
     return createClient(supabaseUrl, supabaseAnonKey)
   }
   
@@ -53,7 +65,8 @@ function getSupabaseClient(): SupabaseClient {
   const placeholderUrl = 'https://placeholder.supabase.co'
   const placeholderKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBsYWNlaG9sZGVyIiwicm9sZSI6ImFub24iLCJpYXQiOjE2NDUxOTIwMDAsImV4cCI6MTk2MDc2ODAwMH0.placeholder'
   
-  console.warn('⚠️ Supabase URL o Anon Key no están configurados. Usando cliente placeholder (solo desarrollo).')
+  console.warn('⚠️ [Supabase Config] Supabase URL o Anon Key no están configurados. Usando cliente placeholder (solo desarrollo).')
+  console.warn('⚠️ [Supabase Config] Esto NO debería pasar en producción. Verifica las variables de entorno en Vercel.')
   
   return createClient(placeholderUrl, placeholderKey)
 }
