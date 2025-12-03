@@ -648,19 +648,19 @@ export default function MetricsPage() {
           ) : (
             <Tabs defaultValue="overview" className="w-full">
               <TabsList className="mb-6 bg-[#1a1a1a] border border-[#333] p-1">
-                <TabsTrigger value="overview" className="data-[state=active]:bg-[#1DB954] data-[state=active]:text-black">
+                <TabsTrigger value="overview" className="text-white data-[state=active]:bg-[#1DB954] data-[state=active]:text-black">
                   <BarChart3 className="w-4 h-4 mr-2" />
                   Overview
                 </TabsTrigger>
-                <TabsTrigger value="roi" className="data-[state=active]:bg-[#1DB954] data-[state=active]:text-black">
+                <TabsTrigger value="roi" className="text-white data-[state=active]:bg-[#1DB954] data-[state=active]:text-black">
                   <DollarSign className="w-4 h-4 mr-2" />
                   ROI & Performance
                 </TabsTrigger>
-                <TabsTrigger value="opportunities" className="data-[state=active]:bg-[#1DB954] data-[state=active]:text-black">
+                <TabsTrigger value="opportunities" className="text-white data-[state=active]:bg-[#1DB954] data-[state=active]:text-black">
                   <Sparkles className="w-4 h-4 mr-2" />
                   Oportunidades
                 </TabsTrigger>
-                <TabsTrigger value="exposure" className="data-[state=active]:bg-[#1DB954] data-[state=active]:text-black">
+                <TabsTrigger value="exposure" className="text-white data-[state=active]:bg-[#1DB954] data-[state=active]:text-black">
                   <Eye className="w-4 h-4 mr-2" />
                   Exposición
                 </TabsTrigger>
