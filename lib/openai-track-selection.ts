@@ -321,8 +321,7 @@ REGLAS CRÍTICAS:
 4. Selecciona canciones que se ajusten al mood/género/actividad del prompt del usuario
 
 OBJETIVOS DE PROMOCIÓN DEL SELLO:
-- Distribuye equitativamente entre TODOS los artistas del catálogo
-- Máximo 2-3 canciones por artista en esta playlist
+- Distribuye equitativamente entre TODOS los artistas del catálogo cuando sea posible
 - Prioriza artistas con menos exposición cuando sea posible
 - Varía entre tracks populares y emergentes
 - Balancea géneros si no hay filtro específico
@@ -353,10 +352,10 @@ Selecciona EXACTAMENTE ${maxTracks} canciones del catálogo anterior que se ajus
 
 INSTRUCCIONES DE SELECCIÓN:
 - Los nombres deben ser EXACTOS como aparecen arriba (formato: TrackName|ArtistName|genres)
-- Distribuye equitativamente entre artistas (máximo 2-3 canciones por artista)
-- Varía los artistas para tener diversidad y promocionar todo el catálogo
+- Varía los artistas para tener diversidad y promocionar todo el catálogo cuando sea posible
 - Crea un flujo musical coherente: inicio → desarrollo → cierre
-- Si el usuario pide un género, prioriza ese género pero incluye variedad${artistTaskInstruction}
+- Si el usuario pide un género, prioriza ese género pero incluye variedad
+- Si el usuario pide artistas específicos, prioriza esos artistas pero también incluye otros${artistTaskInstruction}
 
 IMPORTANTE: 
 - Separa los campos con "|" cuando copies del catálogo
