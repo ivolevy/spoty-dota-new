@@ -5,11 +5,18 @@
 
 import { createClient, SupabaseClient } from '@supabase/supabase-js'
 
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || process.env.SUPABASE_URL || ''
-const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || process.env.SUPABASE_ANON_KEY || ''
+// Función para obtener las variables de entorno en tiempo de ejecución
+function getSupabaseConfig() {
+  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || process.env.SUPABASE_URL || ''
+  const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || process.env.SUPABASE_ANON_KEY || ''
+  
+  return { supabaseUrl, supabaseAnonKey }
+}
 
-// Función para obtener el cliente de Supabase
+// Función para obtener el cliente de Supabase (evalúa en tiempo de ejecución)
 function getSupabaseClient(): SupabaseClient {
+  const { supabaseUrl, supabaseAnonKey } = getSupabaseConfig()
+  
   // Si las variables están configuradas, usar valores reales
   if (supabaseUrl && supabaseAnonKey && 
       supabaseUrl !== '' && 
@@ -31,6 +38,10 @@ function getSupabaseClient(): SupabaseClient {
     
     console.error('❌ ERROR: Variables de entorno de Supabase no configuradas en producción:')
     console.error('   Faltan:', missingVars.join(', '))
+    console.error('   Valores actuales:', {
+      url: supabaseUrl || 'undefined',
+      key: supabaseAnonKey ? `${supabaseAnonKey.substring(0, 20)}...` : 'undefined'
+    })
     console.error('   Configúralas en Vercel Dashboard → Settings → Environment Variables')
     
     // Lanzar error para que sea visible en los logs
@@ -48,4 +59,14 @@ function getSupabaseClient(): SupabaseClient {
 }
 
 // Cliente para uso en el servidor (con Row Level Security)
-export const supabase = getSupabaseClient()
+// Se crea en tiempo de ejecución, no en tiempo de módulo
+let supabaseInstance: SupabaseClient | null = null
+
+export const supabase = new Proxy({} as SupabaseClient, {
+  get(target, prop) {
+    if (!supabaseInstance) {
+      supabaseInstance = getSupabaseClient()
+    }
+    return (supabaseInstance as any)[prop]
+  }
+})
