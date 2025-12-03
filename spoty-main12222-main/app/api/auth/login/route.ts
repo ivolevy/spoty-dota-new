@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server"
 
-const SPOTIFY_CLIENT_ID = process.env.SPOTIFY_CLIENT_ID
-const SPOTIFY_REDIRECT_URI = process.env.SPOTIFY_REDIRECT_URI || "https://spoty-bydota.app/api/auth/callback"
+const SPOTIFY_CLIENT_ID = process.env.SPOTIFY_CLIENT_ID?.trim()
+const SPOTIFY_REDIRECT_URI = (process.env.SPOTIFY_REDIRECT_URI?.trim() || "https://spoty-bydota.vercel.app/api/auth/callback").trim()
 const SPOTIFY_SCOPES = [
   "user-read-private",
   "user-read-email",
@@ -20,6 +20,14 @@ export async function GET(request: NextRequest) {
       { error: "SPOTIFY_CLIENT_ID no está configurado" },
       { status: 500 }
     )
+  }
+
+  // Debug: Log para verificar valores (solo en desarrollo)
+  if (process.env.NODE_ENV !== "production") {
+    console.log("🔍 Spotify OAuth Debug:")
+    console.log("  - Client ID:", SPOTIFY_CLIENT_ID)
+    console.log("  - Redirect URI:", SPOTIFY_REDIRECT_URI)
+    console.log("  - Redirect URI length:", SPOTIFY_REDIRECT_URI.length)
   }
 
   // Obtener la ruta de retorno desde el query parameter

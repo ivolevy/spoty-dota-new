@@ -7,15 +7,26 @@ export const dynamic = 'force-dynamic'
 
 // Spotify OAuth callback handler
 
-const SPOTIFY_CLIENT_ID = process.env.SPOTIFY_CLIENT_ID
-const SPOTIFY_CLIENT_SECRET = process.env.SPOTIFY_CLIENT_SECRET
-const SPOTIFY_REDIRECT_URI = process.env.SPOTIFY_REDIRECT_URI || "https://spoty-bydota.app/api/auth/callback"
+const SPOTIFY_CLIENT_ID = process.env.SPOTIFY_CLIENT_ID?.trim()
+const SPOTIFY_CLIENT_SECRET = process.env.SPOTIFY_CLIENT_SECRET?.trim()
+const SPOTIFY_REDIRECT_URI = (process.env.SPOTIFY_REDIRECT_URI?.trim() || "https://spoty-bydota.vercel.app/api/auth/callback").trim()
 
 export async function GET(request: NextRequest) {
   const searchParams = request.nextUrl.searchParams
   const code = searchParams.get("code")
   const state = searchParams.get("state")
   const error = searchParams.get("error")
+
+  // Debug: Log para verificar valores (solo en desarrollo)
+  if (process.env.NODE_ENV !== "production") {
+    console.log("🔍 Spotify Callback Debug:")
+    console.log("  - Client ID:", SPOTIFY_CLIENT_ID)
+    console.log("  - Client Secret:", SPOTIFY_CLIENT_SECRET ? "***" : "NOT SET")
+    console.log("  - Redirect URI:", SPOTIFY_REDIRECT_URI)
+    console.log("  - Code:", code ? "present" : "missing")
+    console.log("  - State:", state ? "present" : "missing")
+    console.log("  - Error:", error || "none")
+  }
 
   // Verificar si hubo un error en el flujo OAuth
   if (error) {
@@ -65,8 +76,10 @@ export async function GET(request: NextRequest) {
     })
 
     if (!tokenResponse.ok) {
+      const errorText = await tokenResponse.text()
+      console.error("❌ Token exchange failed:", tokenResponse.status, errorText)
       return NextResponse.redirect(
-        new URL("/?error=token_exchange_failed", request.url)
+        new URL(`/?error=token_exchange_failed&details=${encodeURIComponent(errorText)}`, request.url)
       )
     }
 
