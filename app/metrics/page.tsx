@@ -7,8 +7,9 @@ import {
   BarChart3, Users, Clock, Disc3, TrendingUp, Award, 
   PieChart, Activity, Calendar, Headphones, Mic2, Album, Mail, Send, X,
   DollarSign, Target, AlertTriangle, Zap, TrendingDown, DollarSign as Money,
-  ArrowUpRight, ArrowDownRight, Sparkles, AlertCircle
+  ArrowUpRight, ArrowDownRight, Sparkles, AlertCircle, Eye, TrendingUp as TrendingUpIcon
 } from "lucide-react"
+import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs"
 import { ParticlesBackground } from "@/components/particles-background"
 import { useSpotifyAuth } from "@/hooks/use-spotify-auth"
 import {
@@ -645,9 +646,565 @@ export default function MetricsPage() {
               </button>
             </div>
           ) : (
-            <>
-              {/* Overview Cards */}
-              <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4 mb-8">
+            <Tabs defaultValue="overview" className="w-full">
+              <TabsList className="mb-6 bg-[#1a1a1a] border border-[#333] p-1">
+                <TabsTrigger value="overview" className="data-[state=active]:bg-[#1DB954] data-[state=active]:text-black">
+                  <BarChart3 className="w-4 h-4 mr-2" />
+                  Overview
+                </TabsTrigger>
+                <TabsTrigger value="roi" className="data-[state=active]:bg-[#1DB954] data-[state=active]:text-black">
+                  <DollarSign className="w-4 h-4 mr-2" />
+                  ROI & Performance
+                </TabsTrigger>
+                <TabsTrigger value="opportunities" className="data-[state=active]:bg-[#1DB954] data-[state=active]:text-black">
+                  <Sparkles className="w-4 h-4 mr-2" />
+                  Oportunidades
+                </TabsTrigger>
+                <TabsTrigger value="exposure" className="data-[state=active]:bg-[#1DB954] data-[state=active]:text-black">
+                  <Eye className="w-4 h-4 mr-2" />
+                  Exposición
+                </TabsTrigger>
+              </TabsList>
+
+              {/* TAB: OVERVIEW */}
+              <TabsContent value="overview" className="space-y-6">
+                {/* Key Metrics Cards */}
+                <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                  <MetricCard 
+                    icon={<Disc3 className="w-5 h-5" />}
+                    label="Playlists"
+                    value={metrics.totalPlaylists}
+                    color="#1DB954"
+                  />
+                  <MetricCard 
+                    icon={<Music className="w-5 h-5" />}
+                    label="Total Tracks"
+                    value={metrics.totalTracks}
+                    color="#1ed760"
+                  />
+                  <MetricCard 
+                    icon={<Users className="w-5 h-5" />}
+                    label="Total Followers"
+                    value={metrics.totalFollowers}
+                    color="#fbbf24"
+                  />
+                  <MetricCard 
+                    icon={<Clock className="w-5 h-5" />}
+                    label="Total Time"
+                    value={formatDuration(metrics.totalDuration)}
+                    color="#a7f3d0"
+                  />
+                </div>
+
+                {/* Secondary Metrics */}
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                  <MetricCard 
+                    icon={<Headphones className="w-5 h-5" />}
+                    label="Unique Songs"
+                    value={metrics.uniqueTracks}
+                    color="#22c55e"
+                  />
+                  <MetricCard 
+                    icon={<Mic2 className="w-5 h-5" />}
+                    label="Artists"
+                    value={metrics.uniqueArtists}
+                    color="#4ade80"
+                  />
+                  <MetricCard 
+                    icon={<TrendingUp className="w-5 h-5" />}
+                    label="Avg Tracks/Playlist"
+                    value={metrics.avgTracksPerPlaylist}
+                    color="#f472b6"
+                  />
+                  <MetricCard 
+                    icon={<Activity className="w-5 h-5" />}
+                    label="Public Playlists"
+                    value={metrics.publicCount}
+                    color="#60a5fa"
+                  />
+                </div>
+
+                {/* Top Content Grid */}
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                  {/* Top Artists */}
+                  <div className="rounded-xl p-6" style={{ backgroundColor: "#1a1a1a", border: "1px solid #333" }}>
+                    <div className="flex items-center gap-2 mb-6">
+                      <Mic2 className="w-5 h-5 text-[#1DB954]" />
+                      <h2 className="text-lg font-semibold text-white">Top Artists</h2>
+                    </div>
+                    <div className="space-y-3">
+                      {metrics.artistStats.slice(0, 10).map((artist, index) => (
+                        <div key={artist.name} className="flex items-center gap-3">
+                          <div 
+                            className="w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold shrink-0"
+                            style={{ 
+                              backgroundColor: index < 3 ? "#1DB954" : "#333",
+                              color: index < 3 ? "#000" : "#fff"
+                            }}
+                          >
+                            {index + 1}
+                          </div>
+                          <div className="flex-1 min-w-0">
+                            <p className="text-white text-sm font-medium truncate">{artist.name}</p>
+                            <p className="text-gray-500 text-xs">
+                              {artist.trackCount} tracks • {formatDuration(artist.totalDuration)}
+                            </p>
+                          </div>
+                          <div className="shrink-0">
+                            <div className="h-2 rounded-full bg-[#333] w-24 overflow-hidden">
+                              <div 
+                                className="h-full bg-[#1DB954]"
+                                style={{ width: `${(artist.trackCount / metrics.artistStats[0].trackCount) * 100}%` }}
+                              />
+                            </div>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* Top Albums */}
+                  <div className="rounded-xl p-6" style={{ backgroundColor: "#1a1a1a", border: "1px solid #333" }}>
+                    <div className="flex items-center gap-2 mb-6">
+                      <Album className="w-5 h-5 text-[#1DB954]" />
+                      <h2 className="text-lg font-semibold text-white">Top Albums</h2>
+                    </div>
+                    <div className="space-y-3">
+                      {metrics.albumStats.slice(0, 10).map((album, index) => (
+                        <div key={`${album.name}-${album.artist}`} className="flex items-center gap-3">
+                          <img 
+                            src={album.image || "/playlist.png"} 
+                            alt={album.name}
+                            className="w-10 h-10 rounded object-cover shrink-0"
+                          />
+                          <div className="flex-1 min-w-0">
+                            <p className="text-white text-sm font-medium truncate">{album.name}</p>
+                            <p className="text-gray-500 text-xs truncate">{album.artist}</p>
+                          </div>
+                          <div className="text-[#1DB954] text-sm font-medium shrink-0">
+                            {album.trackCount} tracks
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+
+                {/* Recent Playlists */}
+                <div className="rounded-xl p-6" style={{ backgroundColor: "#1a1a1a", border: "1px solid #333" }}>
+                  <div className="flex items-center gap-2 mb-6">
+                    <Calendar className="w-5 h-5 text-[#1DB954]" />
+                    <h2 className="text-lg font-semibold text-white">Recent Playlists</h2>
+                  </div>
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                    {metrics.playlistsByDate.slice(0, 8).map((playlist) => (
+                      <div 
+                        key={playlist.id}
+                        className="flex items-center gap-3 p-3 rounded-lg hover:bg-[#252525] cursor-pointer transition-colors"
+                        onClick={() => router.push("/my-playlists")}
+                      >
+                        <img 
+                          src={playlist.image || "/playlist.png"} 
+                          alt={playlist.name}
+                          className="w-12 h-12 rounded object-cover shrink-0"
+                        />
+                        <div className="flex-1 min-w-0">
+                          <p className="text-white text-sm font-medium truncate">{playlist.name}</p>
+                          <p className="text-gray-500 text-xs">
+                            {new Date(playlist.created_at).toLocaleDateString('en-US', { 
+                              month: 'short', 
+                              day: 'numeric',
+                              year: 'numeric'
+                            })}
+                          </p>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </TabsContent>
+
+              {/* TAB: ROI & PERFORMANCE */}
+              <TabsContent value="roi" className="space-y-6">
+                {businessMetrics ? (
+                  <>
+                    {/* Key ROI Metrics */}
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                      <div className="rounded-xl p-6" style={{ backgroundColor: "#1a1a1a", border: "1px solid #333" }}>
+                        <div className="flex items-center gap-3 mb-4">
+                          <div className="w-10 h-10 rounded-full flex items-center justify-center" style={{ backgroundColor: "rgba(34, 197, 94, 0.2)" }}>
+                            <DollarSign className="w-5 h-5 text-[#22c55e]" />
+                          </div>
+                          <div>
+                            <div className="text-gray-400 text-xs">Total Followers</div>
+                            <div className="text-2xl font-bold text-white">
+                              {businessMetrics.trends.totalFollowersReached.toLocaleString()}
+                            </div>
+                          </div>
+                        </div>
+                        <div className="text-xs text-gray-500">Alcance total</div>
+                      </div>
+
+                      <div className="rounded-xl p-6" style={{ backgroundColor: "#1a1a1a", border: "1px solid #333" }}>
+                        <div className="flex items-center gap-3 mb-4">
+                          <div className="w-10 h-10 rounded-full flex items-center justify-center" style={{ backgroundColor: "rgba(59, 130, 246, 0.2)" }}>
+                            <Target className="w-5 h-5 text-[#3b82f6]" />
+                          </div>
+                          <div>
+                            <div className="text-gray-400 text-xs">Eficiencia</div>
+                            <div className="text-2xl font-bold text-white">
+                              {businessMetrics.efficiency.catalogEfficiency}%
+                            </div>
+                          </div>
+                        </div>
+                        <div className="text-xs text-gray-500">
+                          {businessMetrics.efficiency.tracksPromoted}/{businessMetrics.efficiency.totalTracksInCatalog} tracks
+                        </div>
+                      </div>
+
+                      <div className="rounded-xl p-6" style={{ backgroundColor: "#1a1a1a", border: "1px solid #333" }}>
+                        <div className="flex items-center gap-3 mb-4">
+                          <div className="w-10 h-10 rounded-full flex items-center justify-center" style={{ backgroundColor: "rgba(251, 191, 36, 0.2)" }}>
+                            <AlertTriangle className="w-5 h-5 text-[#fbbf24]" />
+                          </div>
+                          <div>
+                            <div className="text-gray-400 text-xs">Riesgo</div>
+                            <div className="text-2xl font-bold text-white">
+                              {businessMetrics.efficiency.concentrationRisk}%
+                            </div>
+                          </div>
+                        </div>
+                        <div className="text-xs text-gray-500">
+                          Concentración en top tracks
+                          {businessMetrics.efficiency.concentrationRisk > 60 && (
+                            <span className="text-yellow-400 ml-1">⚠️</span>
+                          )}
+                        </div>
+                      </div>
+
+                      <div className="rounded-xl p-6" style={{ backgroundColor: "#1a1a1a", border: "1px solid #333" }}>
+                        <div className="flex items-center gap-3 mb-4">
+                          <div className="w-10 h-10 rounded-full flex items-center justify-center" style={{ backgroundColor: "rgba(239, 68, 68, 0.2)" }}>
+                            <AlertCircle className="w-5 h-5 text-[#ef4444]" />
+                          </div>
+                          <div>
+                            <div className="text-gray-400 text-xs">Sin Promoción</div>
+                            <div className="text-2xl font-bold text-white">
+                              {businessMetrics.efficiency.tracksNeverPromoted}
+                            </div>
+                          </div>
+                        </div>
+                        <div className="text-xs text-gray-500">Tracks sin usar</div>
+                      </div>
+                    </div>
+
+                    {/* Top Tracks by ROI */}
+                    {businessMetrics.roi.topTracksByROI.length > 0 && (
+                      <div className="rounded-xl p-6" style={{ backgroundColor: "#1a1a1a", border: "1px solid #333" }}>
+                        <div className="flex items-center gap-2 mb-6">
+                          <DollarSign className="w-5 h-5 text-[#22c55e]" />
+                          <h2 className="text-lg font-semibold text-white">Top 10 Tracks por ROI</h2>
+                        </div>
+                        <div className="space-y-3">
+                          {businessMetrics.roi.topTracksByROI.slice(0, 10).map((track: any, index: number) => (
+                            <div key={index} className="flex items-center gap-3 p-3 rounded-lg" style={{ backgroundColor: "#0a0a0a" }}>
+                              <div 
+                                className="w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold shrink-0"
+                                style={{ 
+                                  backgroundColor: index < 3 ? "#22c55e" : "#333",
+                                  color: index < 3 ? "#000" : "#fff"
+                                }}
+                              >
+                                {index + 1}
+                              </div>
+                              <div className="flex-1 min-w-0">
+                                <p className="text-white text-sm font-medium truncate">{track.name}</p>
+                                <p className="text-gray-500 text-xs truncate">{track.artist}</p>
+                              </div>
+                              <div className="text-right shrink-0">
+                                <p className="text-white text-sm font-semibold">
+                                  {track.totalFollowersReached.toLocaleString()}
+                                </p>
+                                <p className="text-gray-500 text-xs">
+                                  {track.frequency}x • {track.playlistsCount} playlists
+                                </p>
+                              </div>
+                              {track.isNew && (
+                                <span className="px-2 py-1 rounded text-xs" style={{ backgroundColor: "rgba(34, 197, 94, 0.2)", color: "#22c55e" }}>
+                                  Nuevo
+                                </span>
+                              )}
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+
+                    {/* Top Artists by ROI */}
+                    {businessMetrics.roi.topArtistsByROI.length > 0 && (
+                      <div className="rounded-xl p-6" style={{ backgroundColor: "#1a1a1a", border: "1px solid #333" }}>
+                        <div className="flex items-center gap-2 mb-6">
+                          <Award className="w-5 h-5 text-[#fbbf24]" />
+                          <h2 className="text-lg font-semibold text-white">Top 10 Artistas por ROI</h2>
+                        </div>
+                        <div className="space-y-3">
+                          {businessMetrics.roi.topArtistsByROI.slice(0, 10).map((artist: any, index: number) => (
+                            <div key={index} className="flex items-center gap-3 p-3 rounded-lg" style={{ backgroundColor: "#0a0a0a" }}>
+                              <div 
+                                className="w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold shrink-0"
+                                style={{ 
+                                  backgroundColor: index < 3 ? "#fbbf24" : "#333",
+                                  color: index < 3 ? "#000" : "#fff"
+                                }}
+                              >
+                                {index + 1}
+                              </div>
+                              <div className="flex-1 min-w-0">
+                                <p className="text-white text-sm font-medium truncate">{artist.name}</p>
+                                <p className="text-gray-500 text-xs">
+                                  {artist.tracksPromoted}/{artist.tracksInCatalog} tracks ({artist.efficiency}% eficiencia)
+                                </p>
+                              </div>
+                              <div className="text-right shrink-0">
+                                <p className="text-white text-sm font-semibold">
+                                  {artist.totalFollowersReached.toLocaleString()}
+                                </p>
+                                <p className="text-gray-500 text-xs">ROI: {artist.roiScore}</p>
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+
+                    {/* Most Efficient Artists */}
+                    {businessMetrics.efficiency.topEfficientArtists.length > 0 && (
+                      <div className="rounded-xl p-6" style={{ backgroundColor: "rgba(34, 197, 94, 0.1)", border: "1px solid rgba(34, 197, 94, 0.3)" }}>
+                        <div className="flex items-center gap-2 mb-4">
+                          <Target className="w-5 h-5 text-[#22c55e]" />
+                          <h2 className="text-lg font-semibold text-white">Artistas Más Eficientes</h2>
+                        </div>
+                        <p className="text-gray-400 text-xs mb-4">Mejor aprovechamiento de su catálogo</p>
+                        <div className="grid grid-cols-2 md:grid-cols-5 gap-3">
+                          {businessMetrics.efficiency.topEfficientArtists.slice(0, 10).map((artist: any, index: number) => (
+                            <div key={index} className="p-3 rounded-lg text-center" style={{ backgroundColor: "#0a0a0a" }}>
+                              <p className="text-white text-sm font-medium truncate mb-1">{artist.name}</p>
+                              <p className="text-[#22c55e] text-lg font-bold">{artist.efficiency}%</p>
+                              <p className="text-gray-500 text-xs">
+                                {artist.tracksPromoted}/{artist.tracksInCatalog}
+                              </p>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+                  </>
+                ) : (
+                  <div className="rounded-xl p-12 text-center" style={{ backgroundColor: "#1a1a1a", border: "1px solid #333" }}>
+                    <Loader2 className="w-8 h-8 animate-spin text-[#1DB954] mx-auto mb-4" />
+                    <p className="text-gray-400">Cargando métricas de ROI...</p>
+                  </div>
+                )}
+              </TabsContent>
+
+              {/* TAB: OPORTUNIDADES */}
+              <TabsContent value="opportunities" className="space-y-6">
+                {businessMetrics ? (
+                  <>
+                    {/* New Tracks Not Promoted */}
+                    {businessMetrics.opportunities.newTracksNotPromoted.length > 0 && (
+                      <div className="rounded-xl p-6" style={{ backgroundColor: "#1a1a1a", border: "1px solid #333" }}>
+                        <div className="flex items-center gap-2 mb-4">
+                          <Sparkles className="w-5 h-5 text-[#a855f7]" />
+                          <h2 className="text-lg font-semibold text-white">✨ Tracks Nuevos Sin Promoción</h2>
+                        </div>
+                        <p className="text-gray-400 text-xs mb-4">
+                          Lanzados en los últimos 3 meses - Oportunidad de promoción inmediata
+                        </p>
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                          {businessMetrics.opportunities.newTracksNotPromoted.slice(0, 10).map((track: any, index: number) => (
+                            <div key={index} className="flex items-center gap-2 p-3 rounded-lg" style={{ backgroundColor: "#0a0a0a" }}>
+                              <div className="flex-1 min-w-0">
+                                <p className="text-white text-sm font-medium truncate">{track.name}</p>
+                                <p className="text-gray-500 text-xs truncate">{track.artist}</p>
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+
+                    {/* Artists with Opportunity */}
+                    {businessMetrics.opportunities.opportunityArtists.length > 0 && (
+                      <div className="rounded-xl p-6" style={{ backgroundColor: "#1a1a1a", border: "1px solid #333" }}>
+                        <div className="flex items-center gap-2 mb-4">
+                          <Zap className="w-5 h-5 text-[#f59e0b]" />
+                          <h2 className="text-lg font-semibold text-white">⚡ Artistas con Mayor Oportunidad</h2>
+                        </div>
+                        <p className="text-gray-400 text-xs mb-4">
+                          Catálogo grande pero baja promoción - Potencial de crecimiento
+                        </p>
+                        <div className="space-y-3">
+                          {businessMetrics.opportunities.opportunityArtists.slice(0, 10).map((artist: any, index: number) => (
+                            <div key={index} className="flex items-center gap-3 p-3 rounded-lg" style={{ backgroundColor: "#0a0a0a" }}>
+                              <div className="flex-1 min-w-0">
+                                <p className="text-white text-sm font-medium truncate">{artist.name}</p>
+                                <p className="text-gray-500 text-xs">
+                                  {artist.tracksPromoted}/{artist.tracksInCatalog} tracks ({artist.efficiency}% promocionados)
+                                </p>
+                              </div>
+                              <div className="text-right shrink-0">
+                                <p className="text-white text-xs font-semibold">
+                                  Potencial: {artist.potentialFollowers.toLocaleString()}
+                                </p>
+                                <p className="text-gray-500 text-xs">followers estimados</p>
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+
+                    {/* Tracks Never Promoted */}
+                    {businessMetrics.opportunities.tracksNeverPromoted.length > 0 && (
+                      <div className="rounded-xl p-6" style={{ backgroundColor: "#1a1a1a", border: "1px solid #333" }}>
+                        <div className="flex items-center gap-2 mb-4">
+                          <AlertCircle className="w-5 h-5 text-[#ef4444]" />
+                          <h2 className="text-lg font-semibold text-white">Tracks Sin Promoción</h2>
+                        </div>
+                        <p className="text-gray-400 text-xs mb-4">
+                          Tracks que nunca aparecieron en ninguna playlist
+                        </p>
+                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 max-h-96 overflow-y-auto">
+                          {businessMetrics.opportunities.tracksNeverPromoted.slice(0, 30).map((track: any, index: number) => (
+                            <div key={index} className="p-3 rounded-lg" style={{ backgroundColor: "#0a0a0a" }}>
+                              <p className="text-white text-sm font-medium truncate">{track.name}</p>
+                              <p className="text-gray-500 text-xs truncate">{track.artist}</p>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+                  </>
+                ) : (
+                  <div className="rounded-xl p-12 text-center" style={{ backgroundColor: "#1a1a1a", border: "1px solid #333" }}>
+                    <Loader2 className="w-8 h-8 animate-spin text-[#1DB954] mx-auto mb-4" />
+                    <p className="text-gray-400">Cargando oportunidades...</p>
+                  </div>
+                )}
+              </TabsContent>
+
+              {/* TAB: EXPOSICIÓN */}
+              <TabsContent value="exposure" className="space-y-6">
+                {exposureMetrics ? (
+                  <>
+                    {/* Exposure Rate Cards */}
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      <div className="rounded-lg p-6" style={{ backgroundColor: "rgba(29, 185, 84, 0.1)", border: "1px solid rgba(29, 185, 84, 0.3)" }}>
+                        <div className="text-gray-400 text-xs mb-1">Artistas Promocionados</div>
+                        <div className="text-3xl font-bold text-[#1DB954] mb-1">
+                          {exposureMetrics.exposure.artistsAppeared} / {exposureMetrics.catalog.totalArtists}
+                        </div>
+                        <div className="text-sm text-gray-500">
+                          {exposureMetrics.exposure.artistsExposureRate}% del catálogo
+                        </div>
+                        {exposureMetrics.exposure.artistsNotAppeared > 0 && (
+                          <div className="text-xs text-yellow-400 mt-2">
+                            ⚠️ {exposureMetrics.exposure.artistsNotAppeared} artistas sin exposición
+                          </div>
+                        )}
+                      </div>
+                      
+                      <div className="rounded-lg p-6" style={{ backgroundColor: "rgba(29, 185, 84, 0.1)", border: "1px solid rgba(29, 185, 84, 0.3)" }}>
+                        <div className="text-gray-400 text-xs mb-1">Tracks Promocionados</div>
+                        <div className="text-3xl font-bold text-[#1DB954] mb-1">
+                          {exposureMetrics.exposure.tracksAppeared} / {exposureMetrics.catalog.totalTracks}
+                        </div>
+                        <div className="text-sm text-gray-500">
+                          {exposureMetrics.exposure.tracksExposureRate}% del catálogo
+                        </div>
+                        {exposureMetrics.exposure.tracksNotAppeared > 0 && (
+                          <div className="text-xs text-yellow-400 mt-2">
+                            ⚠️ {exposureMetrics.exposure.tracksNotAppeared} tracks sin exposición
+                          </div>
+                        )}
+                      </div>
+                    </div>
+
+                    {/* Artists Needing Promotion */}
+                    {exposureMetrics.distribution.artistsWithNoExposure.length > 0 && (
+                      <div className="rounded-xl p-6" style={{ backgroundColor: "#1a1a1a", border: "1px solid #333" }}>
+                        <h3 className="text-sm font-semibold text-white mb-3">🎯 Artistas que Necesitan Promoción</h3>
+                        <div className="flex flex-wrap gap-2">
+                          {exposureMetrics.distribution.artistsWithNoExposure.slice(0, 20).map((artist, idx) => (
+                            <span 
+                              key={idx}
+                              className="px-3 py-1 rounded-full text-xs"
+                              style={{ backgroundColor: "rgba(251, 191, 36, 0.2)", color: "#fbbf24", border: "1px solid rgba(251, 191, 36, 0.3)" }}
+                            >
+                              {artist}
+                            </span>
+                          ))}
+                          {exposureMetrics.distribution.artistsWithNoExposure.length > 20 && (
+                            <span className="px-3 py-1 rounded-full text-xs text-gray-500">
+                              +{exposureMetrics.distribution.artistsWithNoExposure.length - 20} más
+                            </span>
+                          )}
+                        </div>
+                      </div>
+                    )}
+
+                    {/* Top Artists by Exposure */}
+                    {exposureMetrics.distribution.topArtists.length > 0 && (
+                      <div className="rounded-xl p-6" style={{ backgroundColor: "#1a1a1a", border: "1px solid #333" }}>
+                        <div className="flex items-center gap-2 mb-4">
+                          <Award className="w-5 h-5 text-[#1DB954]" />
+                          <h2 className="text-lg font-semibold text-white">🏆 Top 10 Artistas por Exposición</h2>
+                        </div>
+                        <div className="space-y-2">
+                          {exposureMetrics.distribution.topArtists.slice(0, 10).map((artist, index) => (
+                            <div key={artist.name} className="flex items-center gap-3">
+                              <div 
+                                className="w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold shrink-0"
+                                style={{ 
+                                  backgroundColor: index < 3 ? "#1DB954" : "#333",
+                                  color: index < 3 ? "#000" : "#fff"
+                                }}
+                              >
+                                {index + 1}
+                              </div>
+                              <div className="flex-1 min-w-0">
+                                <p className="text-white text-sm font-medium truncate">{artist.name}</p>
+                                <p className="text-gray-500 text-xs">
+                                  {artist.frequency} apariciones en playlists
+                                </p>
+                              </div>
+                              <div className="shrink-0">
+                                <div className="h-2 rounded-full bg-[#333] w-24 overflow-hidden">
+                                  <div 
+                                    className="h-full rounded-full"
+                                    style={{ 
+                                      backgroundColor: "#1DB954",
+                                      width: `${(artist.frequency / (exposureMetrics.distribution.topArtists[0]?.frequency || 1)) * 100}%`
+                                    }}
+                                  />
+                                </div>
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+                  </>
+                ) : (
+                  <div className="rounded-xl p-12 text-center" style={{ backgroundColor: "#1a1a1a", border: "1px solid #333" }}>
+                    <Loader2 className="w-8 h-8 animate-spin text-[#1DB954] mx-auto mb-4" />
+                    <p className="text-gray-400">Cargando métricas de exposición...</p>
+                  </div>
+                )}
+              </TabsContent>
+            </Tabs>
+          )}
                 <MetricCard 
                   icon={<Disc3 className="w-5 h-5" />}
                   label="Playlists"
@@ -713,364 +1270,6 @@ export default function MetricsPage() {
                   color="#c084fc"
                 />
               </div>
-
-              {/* Business Metrics - Métricas de Negocio */}
-              {businessMetrics && (
-                <>
-                  {/* ROI & Efficiency Cards */}
-                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
-                    <div className="rounded-xl p-6" style={{ backgroundColor: "#1a1a1a", border: "1px solid #333" }}>
-                      <div className="flex items-center gap-3 mb-4">
-                        <div className="w-10 h-10 rounded-full flex items-center justify-center" style={{ backgroundColor: "rgba(34, 197, 94, 0.2)" }}>
-                          <DollarSign className="w-5 h-5 text-[#22c55e]" />
-                        </div>
-                        <div>
-                          <div className="text-gray-400 text-xs">Total Followers Alcanzados</div>
-                          <div className="text-2xl font-bold text-white">
-                            {businessMetrics.trends.totalFollowersReached.toLocaleString()}
-                          </div>
-                        </div>
-                      </div>
-                      <div className="text-xs text-gray-500">
-                        Alcance total de todas las playlists
-                      </div>
-                    </div>
-
-                    <div className="rounded-xl p-6" style={{ backgroundColor: "#1a1a1a", border: "1px solid #333" }}>
-                      <div className="flex items-center gap-3 mb-4">
-                        <div className="w-10 h-10 rounded-full flex items-center justify-center" style={{ backgroundColor: "rgba(59, 130, 246, 0.2)" }}>
-                          <Target className="w-5 h-5 text-[#3b82f6]" />
-                        </div>
-                        <div>
-                          <div className="text-gray-400 text-xs">Eficiencia de Catálogo</div>
-                          <div className="text-2xl font-bold text-white">
-                            {businessMetrics.efficiency.catalogEfficiency}%
-                          </div>
-                        </div>
-                      </div>
-                      <div className="text-xs text-gray-500">
-                        {businessMetrics.efficiency.tracksPromoted} de {businessMetrics.efficiency.totalTracksInCatalog} tracks promocionados
-                      </div>
-                    </div>
-
-                    <div className="rounded-xl p-6" style={{ backgroundColor: "#1a1a1a", border: "1px solid #333" }}>
-                      <div className="flex items-center gap-3 mb-4">
-                        <div className="w-10 h-10 rounded-full flex items-center justify-center" style={{ backgroundColor: "rgba(251, 191, 36, 0.2)" }}>
-                          <AlertTriangle className="w-5 h-5 text-[#fbbf24]" />
-                        </div>
-                        <div>
-                          <div className="text-gray-400 text-xs">Concentración de Riesgo</div>
-                          <div className="text-2xl font-bold text-white">
-                            {businessMetrics.efficiency.concentrationRisk}%
-                          </div>
-                        </div>
-                      </div>
-                      <div className="text-xs text-gray-500">
-                        % de followers en top 10 tracks
-                        {businessMetrics.efficiency.concentrationRisk > 60 && (
-                          <span className="text-yellow-400 ml-1">⚠️ Alto riesgo</span>
-                        )}
-                      </div>
-                    </div>
-
-                    <div className="rounded-xl p-6" style={{ backgroundColor: "#1a1a1a", border: "1px solid #333" }}>
-                      <div className="flex items-center gap-3 mb-4">
-                        <div className="w-10 h-10 rounded-full flex items-center justify-center" style={{ backgroundColor: "rgba(239, 68, 68, 0.2)" }}>
-                          <AlertCircle className="w-5 h-5 text-[#ef4444]" />
-                        </div>
-                        <div>
-                          <div className="text-gray-400 text-xs">Tracks Sin Promoción</div>
-                          <div className="text-2xl font-bold text-white">
-                            {businessMetrics.efficiency.tracksNeverPromoted}
-                          </div>
-                        </div>
-                      </div>
-                      <div className="text-xs text-gray-500">
-                        Oportunidad perdida de promoción
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* Exposure Metrics Cards */}
-                  {exposureMetrics && (
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
-                      <div className="rounded-xl p-6" style={{ backgroundColor: "#1a1a1a", border: "1px solid #333" }}>
-                        <div className="flex items-center gap-3 mb-4">
-                          <div className="w-10 h-10 rounded-full flex items-center justify-center" style={{ backgroundColor: "rgba(29, 185, 84, 0.2)" }}>
-                            <TrendingUp className="w-5 h-5 text-[#1DB954]" />
-                          </div>
-                          <div>
-                            <div className="text-gray-400 text-xs">Cobertura de Artistas</div>
-                            <div className="text-2xl font-bold text-white">
-                              {exposureMetrics.exposure.artistsExposureRate}%
-                            </div>
-                          </div>
-                        </div>
-                        <div className="text-xs text-gray-500">
-                          {exposureMetrics.exposure.artistsAppeared} de {exposureMetrics.catalog.totalArtists} artistas promocionados
-                        </div>
-                      </div>
-
-                      <div className="rounded-xl p-6" style={{ backgroundColor: "#1a1a1a", border: "1px solid #333" }}>
-                        <div className="flex items-center gap-3 mb-4">
-                          <div className="w-10 h-10 rounded-full flex items-center justify-center" style={{ backgroundColor: "rgba(29, 185, 84, 0.2)" }}>
-                            <Target className="w-5 h-5 text-[#1DB954]" />
-                          </div>
-                          <div>
-                            <div className="text-gray-400 text-xs">Cobertura de Tracks</div>
-                            <div className="text-2xl font-bold text-white">
-                              {exposureMetrics.exposure.tracksExposureRate}%
-                            </div>
-                          </div>
-                        </div>
-                        <div className="text-xs text-gray-500">
-                          {exposureMetrics.exposure.tracksAppeared} de {exposureMetrics.catalog.totalTracks} tracks promocionados
-                        </div>
-                      </div>
-                    </div>
-                  )}
-                </>
-              )}
-
-              {/* Business Metrics Detailed Sections */}
-              {businessMetrics && (
-                <>
-                  {/* Top Tracks por ROI */}
-                  {businessMetrics.roi.topTracksByROI.length > 0 && (
-                    <div className="rounded-xl p-6 mb-6" style={{ backgroundColor: "#1a1a1a", border: "1px solid #333" }}>
-                      <div className="flex items-center gap-2 mb-6">
-                        <DollarSign className="w-5 h-5 text-[#22c55e]" />
-                        <h2 className="text-lg font-semibold text-white">💰 Top 10 Tracks por ROI (Followers Alcanzados)</h2>
-                      </div>
-                      <div className="space-y-3">
-                        {businessMetrics.roi.topTracksByROI.slice(0, 10).map((track: any, index: number) => (
-                          <div key={index} className="flex items-center gap-3 p-3 rounded-lg" style={{ backgroundColor: "#0a0a0a" }}>
-                            <div 
-                              className="w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold shrink-0"
-                              style={{ 
-                                backgroundColor: index < 3 ? "#22c55e" : "#333",
-                                color: index < 3 ? "#000" : "#fff"
-                              }}
-                            >
-                              {index + 1}
-                            </div>
-                            <div className="flex-1 min-w-0">
-                              <p className="text-white text-sm font-medium truncate">{track.name}</p>
-                              <p className="text-gray-500 text-xs truncate">{track.artist}</p>
-                            </div>
-                            <div className="text-right shrink-0">
-                              <p className="text-white text-sm font-semibold">
-                                {track.totalFollowersReached.toLocaleString()}
-                              </p>
-                              <p className="text-gray-500 text-xs">
-                                {track.frequency}x en {track.playlistsCount} playlists
-                              </p>
-                            </div>
-                            {track.isNew && (
-                              <span className="px-2 py-1 rounded text-xs" style={{ backgroundColor: "rgba(34, 197, 94, 0.2)", color: "#22c55e" }}>
-                                Nuevo
-                              </span>
-                            )}
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-                  )}
-
-                  {/* Top Artistas por ROI */}
-                  {businessMetrics.roi.topArtistsByROI.length > 0 && (
-                    <div className="rounded-xl p-6 mb-6" style={{ backgroundColor: "#1a1a1a", border: "1px solid #333" }}>
-                      <div className="flex items-center gap-2 mb-6">
-                        <Award className="w-5 h-5 text-[#fbbf24]" />
-                        <h2 className="text-lg font-semibold text-white">🏆 Top 10 Artistas por ROI</h2>
-                      </div>
-                      <div className="space-y-3">
-                        {businessMetrics.roi.topArtistsByROI.slice(0, 10).map((artist: any, index: number) => (
-                          <div key={index} className="flex items-center gap-3 p-3 rounded-lg" style={{ backgroundColor: "#0a0a0a" }}>
-                            <div 
-                              className="w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold shrink-0"
-                              style={{ 
-                                backgroundColor: index < 3 ? "#fbbf24" : "#333",
-                                color: index < 3 ? "#000" : "#fff"
-                              }}
-                            >
-                              {index + 1}
-                            </div>
-                            <div className="flex-1 min-w-0">
-                              <p className="text-white text-sm font-medium truncate">{artist.name}</p>
-                              <p className="text-gray-500 text-xs">
-                                {artist.tracksPromoted} de {artist.tracksInCatalog} tracks promocionados ({artist.efficiency}% eficiencia)
-                              </p>
-                            </div>
-                            <div className="text-right shrink-0">
-                              <p className="text-white text-sm font-semibold">
-                                {artist.totalFollowersReached.toLocaleString()}
-                              </p>
-                              <p className="text-gray-500 text-xs">
-                                ROI: {artist.roiScore}
-                              </p>
-                            </div>
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-                  )}
-
-                  {/* Oportunidades de Negocio */}
-                  <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
-                    {/* Tracks Nuevos Sin Promoción */}
-                    {businessMetrics.opportunities.newTracksNotPromoted.length > 0 && (
-                      <div className="rounded-xl p-6" style={{ backgroundColor: "#1a1a1a", border: "1px solid #333" }}>
-                        <div className="flex items-center gap-2 mb-4">
-                          <Sparkles className="w-5 h-5 text-[#a855f7]" />
-                          <h2 className="text-lg font-semibold text-white">✨ Tracks Nuevos Sin Promoción</h2>
-                        </div>
-                        <p className="text-gray-400 text-xs mb-4">
-                          Lanzados en los últimos 3 meses - Oportunidad de promoción inmediata
-                        </p>
-                        <div className="space-y-2 max-h-64 overflow-y-auto">
-                          {businessMetrics.opportunities.newTracksNotPromoted.slice(0, 10).map((track: any, index: number) => (
-                            <div key={index} className="flex items-center gap-2 p-2 rounded" style={{ backgroundColor: "#0a0a0a" }}>
-                              <div className="flex-1 min-w-0">
-                                <p className="text-white text-xs font-medium truncate">{track.name}</p>
-                                <p className="text-gray-500 text-xs truncate">{track.artist}</p>
-                              </div>
-                            </div>
-                          ))}
-                        </div>
-                      </div>
-                    )}
-
-                    {/* Artistas con Oportunidad */}
-                    {businessMetrics.opportunities.opportunityArtists.length > 0 && (
-                      <div className="rounded-xl p-6" style={{ backgroundColor: "#1a1a1a", border: "1px solid #333" }}>
-                        <div className="flex items-center gap-2 mb-4">
-                          <Zap className="w-5 h-5 text-[#f59e0b]" />
-                          <h2 className="text-lg font-semibold text-white">⚡ Artistas con Mayor Oportunidad</h2>
-                        </div>
-                        <p className="text-gray-400 text-xs mb-4">
-                          Catálogo grande pero baja promoción - Potencial de crecimiento
-                        </p>
-                        <div className="space-y-3">
-                          {businessMetrics.opportunities.opportunityArtists.slice(0, 8).map((artist: any, index: number) => (
-                            <div key={index} className="flex items-center gap-3 p-3 rounded-lg" style={{ backgroundColor: "#0a0a0a" }}>
-                              <div className="flex-1 min-w-0">
-                                <p className="text-white text-sm font-medium truncate">{artist.name}</p>
-                                <p className="text-gray-500 text-xs">
-                                  {artist.tracksPromoted}/{artist.tracksInCatalog} tracks ({artist.efficiency}% promocionados)
-                                </p>
-                              </div>
-                              <div className="text-right shrink-0">
-                                <p className="text-white text-xs font-semibold">
-                                  Potencial: {artist.potentialFollowers.toLocaleString()}
-                                </p>
-                                <p className="text-gray-500 text-xs">followers estimados</p>
-                              </div>
-                            </div>
-                          ))}
-                        </div>
-                      </div>
-                    )}
-                  </div>
-
-                  {/* Artistas Más Eficientes */}
-                  {businessMetrics.efficiency.topEfficientArtists.length > 0 && (
-                    <div className="rounded-xl p-6 mb-6" style={{ backgroundColor: "rgba(34, 197, 94, 0.1)", border: "1px solid rgba(34, 197, 94, 0.3)" }}>
-                      <div className="flex items-center gap-2 mb-4">
-                        <Target className="w-5 h-5 text-[#22c55e]" />
-                        <h2 className="text-lg font-semibold text-white">🎯 Artistas Más Eficientes</h2>
-                      </div>
-                      <p className="text-gray-400 text-xs mb-4">
-                        Artistas con mejor aprovechamiento de su catálogo (% de tracks promocionados)
-                      </p>
-                      <div className="grid grid-cols-2 md:grid-cols-5 gap-3">
-                        {businessMetrics.efficiency.topEfficientArtists.slice(0, 10).map((artist: any, index: number) => (
-                          <div key={index} className="p-3 rounded-lg text-center" style={{ backgroundColor: "#0a0a0a" }}>
-                            <p className="text-white text-sm font-medium truncate mb-1">{artist.name}</p>
-                            <p className="text-[#22c55e] text-lg font-bold">{artist.efficiency}%</p>
-                            <p className="text-gray-500 text-xs">
-                              {artist.tracksPromoted}/{artist.tracksInCatalog}
-                            </p>
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-                  )}
-                </>
-              )}
-
-              {/* Exposure Metrics Detailed */}
-              {exposureMetrics && (
-                <>
-                  {/* Top Artists by Exposure */}
-                  {exposureMetrics.distribution.topArtists.length > 0 && (
-                    <div className="rounded-xl p-6 mb-6" style={{ backgroundColor: "#1a1a1a", border: "1px solid #333" }}>
-                      <div className="flex items-center gap-2 mb-4">
-                        <Award className="w-5 h-5 text-[#1DB954]" />
-                        <h2 className="text-lg font-semibold text-white">🏆 Top 10 Artistas por Exposición</h2>
-                      </div>
-                      <div className="space-y-2">
-                        {exposureMetrics.distribution.topArtists.slice(0, 10).map((artist, index) => (
-                          <div key={artist.name} className="flex items-center gap-3">
-                            <div 
-                              className="w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold shrink-0"
-                              style={{ 
-                                backgroundColor: index < 3 ? "#1DB954" : "#333",
-                                color: index < 3 ? "#000" : "#fff"
-                              }}
-                            >
-                              {index + 1}
-                            </div>
-                            <div className="flex-1 min-w-0">
-                              <p className="text-white text-sm font-medium truncate">{artist.name}</p>
-                              <p className="text-gray-500 text-xs">
-                                {artist.frequency} apariciones en playlists
-                              </p>
-                            </div>
-                            <div className="shrink-0">
-                              <div className="h-2 rounded-full bg-[#333] w-24 overflow-hidden">
-                                <div 
-                                  className="h-full rounded-full"
-                                  style={{ 
-                                    backgroundColor: "#1DB954",
-                                    width: `${(artist.frequency / (exposureMetrics.distribution.topArtists[0]?.frequency || 1)) * 100}%`
-                                  }}
-                                />
-                              </div>
-                            </div>
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-                  )}
-
-                  {/* Artists Needing Promotion */}
-                  {exposureMetrics.distribution.artistsWithNoExposure.length > 0 && (
-                    <div className="rounded-xl p-6 mb-6" style={{ backgroundColor: "#1a1a1a", border: "1px solid #333" }}>
-                      <div className="flex items-center gap-2 mb-4">
-                        <AlertCircle className="w-5 h-5 text-[#fbbf24]" />
-                        <h2 className="text-lg font-semibold text-white">🎯 Artistas que Necesitan Promoción</h2>
-                      </div>
-                      <div className="flex flex-wrap gap-2">
-                        {exposureMetrics.distribution.artistsWithNoExposure.slice(0, 15).map((artist, idx) => (
-                          <span 
-                            key={idx}
-                            className="px-3 py-1 rounded-full text-xs"
-                            style={{ backgroundColor: "rgba(251, 191, 36, 0.2)", color: "#fbbf24", border: "1px solid rgba(251, 191, 36, 0.3)" }}
-                          >
-                            {artist}
-                          </span>
-                        ))}
-                        {exposureMetrics.distribution.artistsWithNoExposure.length > 15 && (
-                          <span className="px-3 py-1 rounded-full text-xs text-gray-500">
-                            +{exposureMetrics.distribution.artistsWithNoExposure.length - 15} más
-                          </span>
-                        )}
-                      </div>
-                    </div>
-                  )}
-                </>
-              )}
 
               {/* Main Content Grid */}
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
@@ -1249,6 +1448,55 @@ export default function MetricsPage() {
                 </div>
               </div>
 
+              {/* Fun Facts */}
+              <div className="rounded-xl p-6" style={{ backgroundColor: "rgba(29, 185, 84, 0.1)", border: "1px solid rgba(29, 185, 84, 0.3)" }}>
+                <div className="flex items-center gap-2 mb-4">
+                  <Activity className="w-5 h-5 text-[#1DB954]" />
+                  <h2 className="text-lg font-semibold text-white">Fun Facts</h2>
+                </div>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div className="text-gray-300 text-sm">
+                    <span className="text-[#1DB954] font-semibold">🎵 Total listening time:</span>{" "}
+                    {formatDurationLong(metrics.totalDuration)}
+                  </div>
+                  <div className="text-gray-300 text-sm">
+                    <span className="text-[#1DB954] font-semibold">🎤 Most featured artist:</span>{" "}
+                    {metrics.artistStats[0]?.name || "N/A"} ({metrics.artistStats[0]?.trackCount || 0} tracks)
+                  </div>
+                  <div className="text-gray-300 text-sm">
+                    <span className="text-[#1DB954] font-semibold">💿 Most featured album:</span>{" "}
+                    {metrics.albumStats[0]?.name || "N/A"} ({metrics.albumStats[0]?.trackCount || 0} tracks)
+                  </div>
+                  <div className="text-gray-300 text-sm">
+                    <span className="text-[#1DB954] font-semibold">📊 Diversity score:</span>{" "}
+                    {Math.round((metrics.uniqueArtists / metrics.totalTracks) * 100)}% unique artists per track
+                  </div>
+                  {exposureMetrics && (
+                    <>
+                      <div className="text-gray-300 text-sm">
+                        <span className="text-[#1DB954] font-semibold">📈 Cobertura de artistas:</span>{" "}
+                        {exposureMetrics.exposure.artistsExposureRate}% del catálogo promocionado
+                </div>
+                      <div className="text-gray-300 text-sm">
+                        <span className="text-[#1DB954] font-semibold">🎯 Cobertura de tracks:</span>{" "}
+                        {exposureMetrics.exposure.tracksExposureRate}% del catálogo promocionado
+              </div>
+            </>
+          )}
+                  {businessMetrics && (
+                    <>
+                      <div className="text-gray-300 text-sm">
+                        <span className="text-[#1DB954] font-semibold">💰 Total followers alcanzados:</span>{" "}
+                        {businessMetrics.trends.totalFollowersReached.toLocaleString()}
+                      </div>
+                      <div className="text-gray-300 text-sm">
+                        <span className="text-[#1DB954] font-semibold">⚡ Eficiencia de catálogo:</span>{" "}
+                        {businessMetrics.efficiency.catalogEfficiency}% de tracks promocionados
+                      </div>
+                    </>
+                  )}
+                </div>
+              </div>
             </>
           )}
         </div>
