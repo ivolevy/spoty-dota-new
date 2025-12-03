@@ -144,49 +144,106 @@ export async function GET(request: NextRequest) {
 
     // 5. Calcular métricas de negocio
 
-    // ROI por artista: followers alcanzados / tracks en catálogo
+    // Normalizar nombres de artistas para matching correcto
+    const normalizeArtistName = (name: string): string => {
+      return name.toLowerCase().trim()
+    }
+
+    // Agrupar tracks por artista normalizado desde catálogo
+    const catalogTracksByArtist = new Map<string, Set<string>>()
+    catalogTracks.forEach(track => {
+      const normalizedArtist = normalizeArtistName(track.artist)
+      if (!catalogTracksByArtist.has(normalizedArtist)) {
+        catalogTracksByArtist.set(normalizedArtist, new Set())
+      }
+      catalogTracksByArtist.get(normalizedArtist)!.add(track.id)
+    })
+
+    // Agrupar tracks promocionados por artista normalizado
+    const promotedTracksByArtist = new Map<string, {
+      trackIds: Set<string>
+      playlistFollowers: Map<string, number> // playlistId -> followers (para evitar duplicados)
+      totalAppearances: number
+    }>()
+
+    playlistTracksData.forEach(pt => {
+      const normalizedArtist = normalizeArtistName(pt.artist)
+      if (!promotedTracksByArtist.has(normalizedArtist)) {
+        promotedTracksByArtist.set(normalizedArtist, {
+          trackIds: new Set(),
+          playlistFollowers: new Map(),
+          totalAppearances: 0
+        })
+      }
+      const artistData = promotedTracksByArtist.get(normalizedArtist)!
+      artistData.trackIds.add(pt.trackId)
+      artistData.totalAppearances++
+      // Solo contar followers únicos por playlist (el máximo)
+      const currentFollowers = artistData.playlistFollowers.get(pt.playlistId) || 0
+      if (pt.playlistFollowers > currentFollowers) {
+        artistData.playlistFollowers.set(pt.playlistId, pt.playlistFollowers)
+      }
+    })
+
+    // Calcular métricas por artista
     const artistROI = new Map<string, {
       name: string
       tracksInCatalog: number
       tracksPromoted: number
       totalFollowersReached: number
       avgFollowersPerTrack: number
-      roiScore: number // followers alcanzados / tracks en catálogo
-      efficiency: number // % de tracks promocionados
+      avgAppearancesPerTrack: number
+      efficiency: number // % de tracks promocionados (máximo 100%)
+      playlistsCount: number
     }>()
 
     catalogArtists.forEach(artist => {
-      const artistTracksInCatalog = catalogTracks.filter(t => t.artist === artist).length
-      const artistTracksPromoted = new Set(
-        playlistTracksData.filter(pt => pt.artist === artist).map(pt => pt.trackId)
-      )
+      const normalizedArtist = normalizeArtistName(artist)
+      const tracksInCatalog = catalogTracksByArtist.get(normalizedArtist)?.size || 0
+      const promotedData = promotedTracksByArtist.get(normalizedArtist)
       
-      const totalFollowers = playlistTracksData
-        .filter(pt => pt.artist === artist)
-        .reduce((sum, pt) => sum + pt.playlistFollowers, 0)
+      if (!promotedData) {
+        // Artista sin promoción
+        artistROI.set(artist, {
+          name: artist,
+          tracksInCatalog,
+          tracksPromoted: 0,
+          totalFollowersReached: 0,
+          avgFollowersPerTrack: 0,
+          avgAppearancesPerTrack: 0,
+          efficiency: 0,
+          playlistsCount: 0
+        })
+        return
+      }
 
-      const uniquePlaylists = new Set(
-        playlistTracksData.filter(pt => pt.artist === artist).map(pt => pt.playlistId)
-      )
+      const tracksPromoted = promotedData.trackIds.size
+      const totalFollowersReached = Array.from(promotedData.playlistFollowers.values())
+        .reduce((sum, followers) => sum + followers, 0)
+      const playlistsCount = promotedData.playlistFollowers.size
+
+      // Calcular eficiencia (asegurar que no exceda 100%)
+      const efficiency = tracksInCatalog > 0
+        ? Math.min(100, Math.round((tracksPromoted / tracksInCatalog) * 100))
+        : 0
 
       artistROI.set(artist, {
         name: artist,
-        tracksInCatalog: artistTracksInCatalog,
-        tracksPromoted: artistTracksPromoted.size,
-        totalFollowersReached: totalFollowers,
-        avgFollowersPerTrack: artistTracksPromoted.size > 0 
-          ? Math.round(totalFollowers / artistTracksPromoted.size) 
+        tracksInCatalog,
+        tracksPromoted,
+        totalFollowersReached,
+        avgFollowersPerTrack: tracksPromoted > 0
+          ? Math.round(totalFollowersReached / tracksPromoted)
           : 0,
-        roiScore: artistTracksInCatalog > 0 
-          ? Math.round(totalFollowers / artistTracksInCatalog) 
+        avgAppearancesPerTrack: tracksPromoted > 0
+          ? Math.round(promotedData.totalAppearances / tracksPromoted)
           : 0,
-        efficiency: artistTracksInCatalog > 0
-          ? Math.round((artistTracksPromoted.size / artistTracksInCatalog) * 100)
-          : 0
+        efficiency,
+        playlistsCount
       })
     })
 
-    // ROI por track: followers alcanzados por track
+    // ROI por track: followers alcanzados por track (contando followers únicos por playlist)
     const trackROI = new Map<string, {
       id: string
       name: string
@@ -197,43 +254,61 @@ export async function GET(request: NextRequest) {
       playlistsCount: number
       releaseDate: string | null
       isNew: boolean
+      playlistFollowersMap?: Map<string, number> // Temporal para cálculo
     }>()
 
     playlistTracksData.forEach(pt => {
-      const existing = trackROI.get(pt.trackId) || {
-        id: pt.trackId,
-        name: pt.trackName,
-        artist: pt.artist,
-        frequency: 0,
-        totalFollowersReached: 0,
-        avgFollowersPerAppearance: 0,
-        playlistsCount: 0,
-        releaseDate: tracksMetadataMap.get(pt.trackId)?.release_date || null,
-        isNew: false
+      const existing = trackROI.get(pt.trackId)
+      
+      if (!existing) {
+        const releaseDate = tracksMetadataMap.get(pt.trackId)?.release_date || null
+        let isNew = false
+        if (releaseDate) {
+          const rd = new Date(releaseDate)
+          const threeMonthsAgo = new Date()
+          threeMonthsAgo.setMonth(threeMonthsAgo.getMonth() - 3)
+          isNew = rd >= threeMonthsAgo
+        }
+
+        const playlistFollowersMap = new Map<string, number>()
+        playlistFollowersMap.set(pt.playlistId, pt.playlistFollowers)
+
+        trackROI.set(pt.trackId, {
+          id: pt.trackId,
+          name: pt.trackName,
+          artist: pt.artist,
+          frequency: 1,
+          totalFollowersReached: pt.playlistFollowers,
+          avgFollowersPerAppearance: pt.playlistFollowers,
+          playlistsCount: 1,
+          releaseDate,
+          isNew,
+          playlistFollowersMap
+        })
+      } else {
+        existing.frequency++
+        // Solo contar followers únicos por playlist (el máximo)
+        const playlistFollowersMap = existing.playlistFollowersMap || new Map()
+        const currentFollowers = playlistFollowersMap.get(pt.playlistId) || 0
+        if (pt.playlistFollowers > currentFollowers) {
+          existing.totalFollowersReached = existing.totalFollowersReached - currentFollowers + pt.playlistFollowers
+          playlistFollowersMap.set(pt.playlistId, pt.playlistFollowers)
+        }
+        // Actualizar playlistsCount si es una playlist nueva
+        if (!playlistFollowersMap.has(pt.playlistId)) {
+          existing.playlistsCount++
+          playlistFollowersMap.set(pt.playlistId, pt.playlistFollowers)
+        }
+        existing.playlistFollowersMap = playlistFollowersMap
+        existing.avgFollowersPerAppearance = existing.frequency > 0
+          ? Math.round(existing.totalFollowersReached / existing.frequency)
+          : 0
       }
-      
-      existing.frequency++
-      existing.totalFollowersReached += pt.playlistFollowers
-      existing.playlistsCount = new Set([
-        ...(existing.playlistsCount ? [existing.playlistsCount] : []),
-        pt.playlistId
-      ]).size
-      
-      trackROI.set(pt.trackId, existing)
     })
 
-    // Calcular avgFollowersPerAppearance y isNew
-    trackROI.forEach((track, id) => {
-      track.avgFollowersPerAppearance = track.frequency > 0
-        ? Math.round(track.totalFollowersReached / track.frequency)
-        : 0
-      
-      if (track.releaseDate) {
-        const releaseDate = new Date(track.releaseDate)
-        const threeMonthsAgo = new Date()
-        threeMonthsAgo.setMonth(threeMonthsAgo.getMonth() - 3)
-        track.isNew = releaseDate >= threeMonthsAgo
-      }
+    // Limpiar playlistFollowersMap antes de retornar
+    trackROI.forEach((track) => {
+      delete track.playlistFollowersMap
     })
 
     // Tracks que nunca aparecieron (dinero desperdiciado)
@@ -289,9 +364,9 @@ export async function GET(request: NextRequest) {
     // Top tracks por ROI (followers alcanzados)
     const topTracksByROI = sortedTracksByFollowers.slice(0, 20)
 
-    // Top artistas por ROI
+    // Top artistas por followers alcanzados (métrica más útil que ROI score)
     const topArtistsByROI = Array.from(artistROI.values())
-      .sort((a, b) => b.roiScore - a.roiScore)
+      .sort((a, b) => b.totalFollowersReached - a.totalFollowersReached)
       .slice(0, 20)
 
     // Artistas con mejor eficiencia (alta promoción de su catálogo)
@@ -318,8 +393,10 @@ export async function GET(request: NextRequest) {
             tracksInCatalog: a.tracksInCatalog,
             tracksPromoted: a.tracksPromoted,
             totalFollowersReached: a.totalFollowersReached,
-            roiScore: a.roiScore,
-            efficiency: a.efficiency
+            avgFollowersPerTrack: a.avgFollowersPerTrack,
+            avgAppearancesPerTrack: a.avgAppearancesPerTrack,
+            efficiency: a.efficiency,
+            playlistsCount: a.playlistsCount
           }))
         },
         efficiency: {

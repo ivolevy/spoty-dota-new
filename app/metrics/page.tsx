@@ -969,7 +969,9 @@ export default function MetricsPage() {
                                 <p className="text-white text-sm font-semibold">
                                   {artist.totalFollowersReached.toLocaleString()}
                                 </p>
-                                <p className="text-gray-500 text-xs">ROI: {artist.roiScore}</p>
+                                <p className="text-gray-500 text-xs">
+                                  {artist.avgFollowersPerTrack.toLocaleString()} avg/ track • {artist.playlistsCount} playlists
+                                </p>
                               </div>
                             </div>
                           ))}
