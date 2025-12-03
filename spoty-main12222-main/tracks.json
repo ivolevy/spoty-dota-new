@@ -1,0 +1,929 @@
+{
+    "metadata": {
+        "label_search": "DALE PLAY / DALEPLAY",
+        "description": "Lista de TRACKS individuales (canciones), NO álbumes",
+        "total_unique_tracks": 45,
+        "search_date": "2025-11-29 21:54:08"
+    },
+    "tracks": [
+        {
+            "id": "6uiQ0DqbXTBc8tl0AUKZkR",
+            "name": "TU VAS SIN (fav)",
+            "artists": [
+                "Rels B"
+            ],
+            "album": "afroLOVA 25'",
+            "album_id": "6j8S3AOIOXBR1qfd3n2wHm",
+            "label": "DALE PLAY Records / Flakk Team",
+            "release_date": "2025-06-20",
+            "duration_ms": 110495,
+            "popularity": 90,
+            "external_urls": {
+                "spotify": "https://open.spotify.com/track/6uiQ0DqbXTBc8tl0AUKZkR"
+            },
+            "preview_url": null,
+            "genres": [
+                "pop"
+            ]
+        },
+        {
+            "id": "1IgrATr9zMmRjtFVFY6O7s",
+            "name": "PUTERÍ4",
+            "artists": [
+                "DobleP",
+                "Peipper"
+            ],
+            "album": "PUTERÍ4",
+            "album_id": "1lkzZ6bQyw3lWsviJs8HAD",
+            "label": "DALE PLAY Records / Wesaisons Records",
+            "release_date": "2025-10-30",
+            "duration_ms": 144468,
+            "popularity": 64,
+            "external_urls": {
+                "spotify": "https://open.spotify.com/track/1IgrATr9zMmRjtFVFY6O7s"
+            },
+            "preview_url": null,
+            "genres": [
+                "pop"
+            ]
+        },
+        {
+            "id": "30vXLQ9yPEKdTNGHYik0iR",
+            "name": "Tus Cosas (feat. Airbag)",
+            "artists": [
+                "Tan Bionica",
+                "Airbag"
+            ],
+            "album": "El Regreso",
+            "album_id": "13P9Qaty5SUmKgpSvpbOYt",
+            "label": "DALE PLAY Records",
+            "release_date": "2025-11-04",
+            "duration_ms": 187693,
+            "popularity": 71,
+            "external_urls": {
+                "spotify": "https://open.spotify.com/track/30vXLQ9yPEKdTNGHYik0iR"
+            },
+            "preview_url": null,
+            "genres": [
+                "rock"
+            ]
+        },
+        {
+            "id": "2ZnPYAPDhKchVWojXNsanA",
+            "name": "Indiquen | E3",
+            "artists": [
+                "DJ Alex",
+                "Alejo Isakk"
+            ],
+            "album": "Indiquen | E3",
+            "album_id": "16juKt5KL7fhqsySY2B9LX",
+            "label": "DALE PLAY Records",
+            "release_date": "2022-03-03",
+            "duration_ms": 162285,
+            "popularity": 7,
+            "external_urls": {
+                "spotify": "https://open.spotify.com/track/2ZnPYAPDhKchVWojXNsanA"
+            },
+            "preview_url": null,
+            "genres": [
+                "pop"
+            ]
+        },
+        {
+            "id": "7w4FEgZqENPTBndTK3blvo",
+            "name": "PONTE PERRO - TIC TAC",
+            "artists": [
+                "Ponte Perro"
+            ],
+            "album": "PONTE PERRO - TIC TAC",
+            "album_id": "4snzrr2W8oUuddBuXkRQD3",
+            "label": "DALE PLAY Records / GOAT Records",
+            "release_date": "2023-08-17",
+            "duration_ms": 176045,
+            "popularity": 4,
+            "external_urls": {
+                "spotify": "https://open.spotify.com/track/7w4FEgZqENPTBndTK3blvo"
+            },
+            "preview_url": null,
+            "genres": [
+                "rock"
+            ]
+        },
+        {
+            "id": "35ttE4t8lQZA2vuCYDg4G7",
+            "name": "M.A.I",
+            "artists": [
+                "Milo j"
+            ],
+            "album": "111",
+            "album_id": "338cbfABt3duRORfvNeqLT",
+            "label": "DALE PLAY Records",
+            "release_date": "2023-11-30",
+            "duration_ms": 184027,
+            "popularity": 78,
+            "external_urls": {
+                "spotify": "https://open.spotify.com/track/35ttE4t8lQZA2vuCYDg4G7"
+            },
+            "preview_url": null,
+            "genres": [
+                "pop"
+            ]
+        },
+        {
+            "id": "40djkWLHFMFKvGJwqAdRIo",
+            "name": "Por Mil Noches",
+            "artists": [
+                "Airbag"
+            ],
+            "album": "Por Mil Noches",
+            "album_id": "6Mlff91HPW6QhoCCGJK3sR",
+            "label": "DALE PLAY Records / Airbag",
+            "release_date": "2011-11-27",
+            "duration_ms": 295936,
+            "popularity": 26,
+            "external_urls": {
+                "spotify": "https://open.spotify.com/track/40djkWLHFMFKvGJwqAdRIo"
+            },
+            "preview_url": null,
+            "genres": [
+                "rock"
+            ]
+        },
+        {
+            "id": "60SvKPIojQtp07oUgHr5Uo",
+            "name": "WOS - MIRÁ MAMÁ (En Vivo Argentinos Juniors)",
+            "artists": [
+                "WOS"
+            ],
+            "album": "WOS - MIRÁ MAMÁ (En Vivo Argentinos Juniors)",
+            "album_id": "2RYkCtmyCxvfQoljEGohjV",
+            "label": "DOGUITO Records / DALE PLAY Records",
+            "release_date": "2023-03-29",
+            "duration_ms": 241045,
+            "popularity": 42,
+            "external_urls": {
+                "spotify": "https://open.spotify.com/track/60SvKPIojQtp07oUgHr5Uo"
+            },
+            "preview_url": null,
+            "genres": [
+                "rock"
+            ]
+        },
+        {
+            "id": "1qAMb1y3o7Olwm8pYTuzyV",
+            "name": "Nunca Lo Olvides",
+            "artists": [
+                "Airbag"
+            ],
+            "album": "Nunca Lo Olvides",
+            "album_id": "6ZDbOUt4FRdFgQEbhJyFui",
+            "label": "DALE PLAY Records",
+            "release_date": "2023-12-07",
+            "duration_ms": 299810,
+            "popularity": 66,
+            "external_urls": {
+                "spotify": "https://open.spotify.com/track/1qAMb1y3o7Olwm8pYTuzyV"
+            },
+            "preview_url": null,
+            "genres": [
+                "rock"
+            ]
+        },
+        {
+            "id": "03a359wbiUsjN9h6yzXvmS",
+            "name": "She Don't Give a Fo",
+            "artists": [
+                "Duki",
+                "KHEA"
+            ],
+            "album": "She Don't Give a Fo",
+            "album_id": "42ZO19JImkKWh6y7rfvrfM",
+            "label": "DALE PLAY Records",
+            "release_date": "2018-03-12",
+            "duration_ms": 209531,
+            "popularity": 73,
+            "external_urls": {
+                "spotify": "https://open.spotify.com/track/03a359wbiUsjN9h6yzXvmS"
+            },
+            "preview_url": null,
+            "genres": [
+                "trap"
+            ]
+        },
+        {
+            "id": "4LvjsFwogWn8J9IXuC0UlN",
+            "name": "Mil Días",
+            "artists": [
+                "Tan Bionica"
+            ],
+            "album": "El Regreso",
+            "album_id": "13P9Qaty5SUmKgpSvpbOYt",
+            "label": "DALE PLAY Records",
+            "release_date": "2025-11-04",
+            "duration_ms": 250000,
+            "popularity": 64,
+            "external_urls": {
+                "spotify": "https://open.spotify.com/track/4LvjsFwogWn8J9IXuC0UlN"
+            },
+            "preview_url": null,
+            "genres": [
+                "rock"
+            ]
+        },
+        {
+            "id": "5lTEV3vABhge7O8z63r4Kw",
+            "name": "Leïti Sene x Trueno - 5:05 pm (Official Video)",
+            "artists": [
+                "LEÏTI",
+                "Trueno"
+            ],
+            "album": "Leïti Sene x Trueno - 5:05 pm (Official Video)",
+            "album_id": "6gbcSpCjn7srPNje5VdStM",
+            "label": "DALE PLAY Records",
+            "release_date": "2022-07-14",
+            "duration_ms": 220563,
+            "popularity": 9,
+            "external_urls": {
+                "spotify": "https://open.spotify.com/track/5lTEV3vABhge7O8z63r4Kw"
+            },
+            "preview_url": null,
+            "genres": [
+                "trap"
+            ]
+        },
+        {
+            "id": "23FJGRug9hlYUIBnrmkIBX",
+            "name": "Cicatrices",
+            "artists": [
+                "Airbag"
+            ],
+            "album": "Mentira La Verdad",
+            "album_id": "6MYRm0FnvxfQVxc2U6IVPA",
+            "label": "DALE PLAY Records / Airbag",
+            "release_date": "2016-09-16",
+            "duration_ms": 228541,
+            "popularity": 70,
+            "external_urls": {
+                "spotify": "https://open.spotify.com/track/23FJGRug9hlYUIBnrmkIBX"
+            },
+            "preview_url": null,
+            "genres": [
+                "rock"
+            ]
+        },
+        {
+            "id": "1y4J9i1p5Nr3ud0Hv5RgnU",
+            "name": "Rei, YSY A - Sin Berretín (Video Oficial)",
+            "artists": [
+                "Rei"
+            ],
+            "album": "Rei, YSY A - Sin Berretín (Video Oficial)",
+            "album_id": "3D3VUJrvlnfYLsJ2z35OS8",
+            "label": "DALE PLAY Records",
+            "release_date": "2023-10-24",
+            "duration_ms": 146885,
+            "popularity": 6,
+            "external_urls": {
+                "spotify": "https://open.spotify.com/track/1y4J9i1p5Nr3ud0Hv5RgnU"
+            },
+            "preview_url": null,
+            "genres": [
+                "trap"
+            ]
+        },
+        {
+            "id": "3C3jUjAEccoQEWSUeseRiK",
+            "name": "MILO J - RINCÓN (Video Oficial)",
+            "artists": [
+                "Milo j"
+            ],
+            "album": "MILO J - RINCÓN (Video Oficial)",
+            "album_id": "5HC614U4eTYVcOKjKsPRMe",
+            "label": "DALE PLAY Records",
+            "release_date": "2023-07-05",
+            "duration_ms": 167965,
+            "popularity": 27,
+            "external_urls": {
+                "spotify": "https://open.spotify.com/track/3C3jUjAEccoQEWSUeseRiK"
+            },
+            "preview_url": null,
+            "genres": [
+                "pop"
+            ]
+        },
+        {
+            "id": "5IaRQijUozpqk1JonJBAgS",
+            "name": "WOS - OJERAS NEGRAS (En Vivo Argentinos Juniors)",
+            "artists": [
+                "WOS"
+            ],
+            "album": "WOS - OJERAS NEGRAS (En Vivo Argentinos Juniors)",
+            "album_id": "0fQfNNtGaIopFYb7AotIwJ",
+            "label": "DOGUITO Records / DALE PLAY Records",
+            "release_date": "2023-03-29",
+            "duration_ms": 186885,
+            "popularity": 9,
+            "external_urls": {
+                "spotify": "https://open.spotify.com/track/5IaRQijUozpqk1JonJBAgS"
+            },
+            "preview_url": null,
+            "genres": [
+                "rock"
+            ]
+        },
+        {
+            "id": "2Wp0WQPxsNPlBCohxCFry9",
+            "name": "Margarita - Adonde voy (Video Oficial)",
+            "artists": [
+                "Margarita"
+            ],
+            "album": "Margarita - Adonde voy (Video Oficial)",
+            "album_id": "5z5CQQFUaFiBj0HBZdmo5p",
+            "label": "Cris Morena Group bajo licencia exclusiva a DALE PLAY Records",
+            "release_date": "2024-07-23",
+            "duration_ms": 112041,
+            "popularity": 13,
+            "external_urls": {
+                "spotify": "https://open.spotify.com/track/2Wp0WQPxsNPlBCohxCFry9"
+            },
+            "preview_url": null,
+            "genres": [
+                "pop"
+            ]
+        },
+        {
+            "id": "0ePYnYOW3LnkhPwX86l2wZ",
+            "name": "DUKI, C.R.O - Harakiri (Video Oficial)",
+            "artists": [
+                "Duki",
+                "C.R.O"
+            ],
+            "album": "DUKI, C.R.O - Harakiri (Video Oficial)",
+            "album_id": "329kV5pFoq5wMxw6mhgjTZ",
+            "label": "DALE PLAY Records / SSJ Records",
+            "release_date": "2023-03-29",
+            "duration_ms": 172045,
+            "popularity": 18,
+            "external_urls": {
+                "spotify": "https://open.spotify.com/track/0ePYnYOW3LnkhPwX86l2wZ"
+            },
+            "preview_url": null,
+            "genres": [
+                "trap"
+            ]
+        },
+        {
+            "id": "2i6Icft096AOSWT0SSmPid",
+            "name": "WOS - QUE SE MEJOREN (En Vivo Argentinos Juniors)",
+            "artists": [
+                "WOS"
+            ],
+            "album": "WOS - QUE SE MEJOREN (En Vivo Argentinos Juniors)",
+            "album_id": "5P0qG6lDKUVii7GFoaaeJI",
+            "label": "DOGUITO Records / DALE PLAY Records",
+            "release_date": "2023-03-29",
+            "duration_ms": 211045,
+            "popularity": 9,
+            "external_urls": {
+                "spotify": "https://open.spotify.com/track/2i6Icft096AOSWT0SSmPid"
+            },
+            "preview_url": null,
+            "genres": [
+                "rock"
+            ]
+        },
+        {
+            "id": "7c9oRZ3UIRjrYPchH36BYd",
+            "name": "No Me Conocen (Remix) [con DUKI, Rei & Tiago PZK]",
+            "artists": [
+                "BANDIDO",
+                "Duki",
+                "Rei",
+                "Tiago PZK"
+            ],
+            "album": "No Me Conocen (Remix) [con DUKI, Rei & Tiago PZK]",
+            "album_id": "2eNhSHzYeJtrzZR1b4eqxp",
+            "label": "DALE PLAY Records",
+            "release_date": "2021-07-02",
+            "duration_ms": 281525,
+            "popularity": 16,
+            "external_urls": {
+                "spotify": "https://open.spotify.com/track/7c9oRZ3UIRjrYPchH36BYd"
+            },
+            "preview_url": null,
+            "genres": [
+                "trap"
+            ]
+        },
+        {
+            "id": "1P7ohrWnhiddaouQ5EoYBV",
+            "name": "Margarita - Corazón de Rey (VideoClip Oficial)",
+            "artists": [
+                "Margarita"
+            ],
+            "album": "Margarita - Corazón de Rey (VideoClip Oficial)",
+            "album_id": "5BpHKtua3tlJAFWKyrNFfO",
+            "label": "Cris Morena Group bajo licencia exclusiva a DALE PLAY Records",
+            "release_date": "2024-06-26",
+            "duration_ms": 182400,
+            "popularity": 14,
+            "external_urls": {
+                "spotify": "https://open.spotify.com/track/1P7ohrWnhiddaouQ5EoYBV"
+            },
+            "preview_url": null,
+            "genres": [
+                "pop"
+            ]
+        },
+        {
+            "id": "71sMo4ehyv6NbkVRPnYvI5",
+            "name": "WOS - CANGURO (En Vivo Argentinos Juniors)",
+            "artists": [
+                "WOS"
+            ],
+            "album": "WOS - CANGURO (En Vivo Argentinos Juniors)",
+            "album_id": "1WFP56unZBS6um3Sz4An9F",
+            "label": "DOGUITO Records / DALE PLAY Records",
+            "release_date": "2023-03-29",
+            "duration_ms": 265325,
+            "popularity": 38,
+            "external_urls": {
+                "spotify": "https://open.spotify.com/track/71sMo4ehyv6NbkVRPnYvI5"
+            },
+            "preview_url": null,
+            "genres": [
+                "rock"
+            ]
+        },
+        {
+            "id": "6QdzlrwQMcyiNhmH9UCqEf",
+            "name": "BM, Hernan y la Champion's Liga - DIME SI ERES FELIZ VOL.2 (Video Oficial)",
+            "artists": [
+                "BM",
+                "Hernan y La Champion's Liga"
+            ],
+            "album": "BM, Hernan y la Champion's Liga - DIME SI ERES FELIZ VOL.2 (Video Oficial)",
+            "album_id": "3YfgyQWruhXuDbR7OnQ9Ek",
+            "label": "DALE PLAY Records / Wesaisons Records",
+            "release_date": "2023-08-30",
+            "duration_ms": 172405,
+            "popularity": 9,
+            "external_urls": {
+                "spotify": "https://open.spotify.com/track/6QdzlrwQMcyiNhmH9UCqEf"
+            },
+            "preview_url": null,
+            "genres": [
+                "trap"
+            ]
+        },
+        {
+            "id": "5ph1c1V8L9r8rcMvjpwLYr",
+            "name": "WOS - NIÑO GORDO FLACO ft. Ca7riel (En Vivo Argentinos Juniors)",
+            "artists": [
+                "WOS"
+            ],
+            "album": "WOS - NIÑO GORDO FLACO ft. Ca7riel (En Vivo Argentinos Juniors)",
+            "album_id": "6ZYh2n3rSOJiTvtm3KI3iJ",
+            "label": "DOGUITO Records / DALE PLAY Records",
+            "release_date": "2023-03-29",
+            "duration_ms": 250085,
+            "popularity": 11,
+            "external_urls": {
+                "spotify": "https://open.spotify.com/track/5ph1c1V8L9r8rcMvjpwLYr"
+            },
+            "preview_url": null,
+            "genres": [
+                "rock"
+            ]
+        },
+        {
+            "id": "00PXCllK5zJDEEIDe4QSdq",
+            "name": "WOS - ARRANCARMELO (En Vivo Argentinos Juniors)",
+            "artists": [
+                "WOS"
+            ],
+            "album": "WOS - ARRANCARMELO (En Vivo Argentinos Juniors)",
+            "album_id": "1CJOjBHDQoWXbk3Lf7knxE",
+            "label": "DOGUITO Records / DALE PLAY Records",
+            "release_date": "2023-03-29",
+            "duration_ms": 215125,
+            "popularity": 40,
+            "external_urls": {
+                "spotify": "https://open.spotify.com/track/00PXCllK5zJDEEIDe4QSdq"
+            },
+            "preview_url": null,
+            "genres": [
+                "rock"
+            ]
+        },
+        {
+            "id": "7D6fjQo1TYebBsElkmBZ6Y",
+            "name": "WOS - CULPA ft. Ricardo Mollo (En Vivo Argentinos Juniors)",
+            "artists": [
+                "WOS"
+            ],
+            "album": "WOS - CULPA ft. Ricardo Mollo (En Vivo Argentinos Juniors)",
+            "album_id": "4cah2q8i9rM9FfUKECyfZ0",
+            "label": "DOGUITO Records / DALE PLAY Records",
+            "release_date": "2023-03-29",
+            "duration_ms": 305445,
+            "popularity": 39,
+            "external_urls": {
+                "spotify": "https://open.spotify.com/track/7D6fjQo1TYebBsElkmBZ6Y"
+            },
+            "preview_url": null,
+            "genres": [
+                "rock"
+            ]
+        },
+        {
+            "id": "3S3M8mvufUSWdnQ1FAL3kK",
+            "name": "WOS - CAMBIANDO LA PIEL ft. Nicki Nicole (En Vivo Argentinos Juniors)",
+            "artists": [
+                "WOS",
+                "Nicki Nicole"
+            ],
+            "album": "WOS - CAMBIANDO LA PIEL ft. Nicki Nicole (En Vivo Argentinos Juniors)",
+            "album_id": "7bXXQpxr4Ut6nuseKOUZMZ",
+            "label": "DOGUITO Records / DALE PLAY Records",
+            "release_date": "2023-03-29",
+            "duration_ms": 202365,
+            "popularity": 41,
+            "external_urls": {
+                "spotify": "https://open.spotify.com/track/3S3M8mvufUSWdnQ1FAL3kK"
+            },
+            "preview_url": null,
+            "genres": [
+                "pop"
+            ]
+        },
+        {
+            "id": "3E4ZzO4ySupnYypDPXcc3D",
+            "name": "Rockstar",
+            "artists": [
+                "Duki"
+            ],
+            "album": "Rockstar",
+            "album_id": "15Pp0263atXizZbrwTEWjb",
+            "label": "DALE PLAY Records",
+            "release_date": "2018-03-09",
+            "duration_ms": 112273,
+            "popularity": 70,
+            "external_urls": {
+                "spotify": "https://open.spotify.com/track/3E4ZzO4ySupnYypDPXcc3D"
+            },
+            "preview_url": null,
+            "genres": [
+                "trap"
+            ]
+        },
+        {
+            "id": "2uPMsTEKx79gJ8rB3AcT0v",
+            "name": "Daddy Yankee: Bzrp Music Sessions, Vol. 0/66",
+            "artists": [
+                "Bizarrap",
+                "Daddy Yankee"
+            ],
+            "album": "Daddy Yankee: Bzrp Music Sessions, Vol. 0/66",
+            "album_id": "1lYZ1jkIDGcPVbBRIadB4t",
+            "label": "DALE PLAY Records",
+            "release_date": "2025-11-05",
+            "duration_ms": 151805,
+            "popularity": 90,
+            "external_urls": {
+                "spotify": "https://open.spotify.com/track/2uPMsTEKx79gJ8rB3AcT0v"
+            },
+            "preview_url": null,
+            "genres": [
+                "trap"
+            ]
+        },
+        {
+            "id": "3jaeafKcSsBnhdKQz0R8cK",
+            "name": "Boquitas Pintadas (feat. Nicki Nicole)",
+            "artists": [
+                "Tan Bionica",
+                "Nicki Nicole"
+            ],
+            "album": "El Regreso",
+            "album_id": "13P9Qaty5SUmKgpSvpbOYt",
+            "label": "DALE PLAY Records",
+            "release_date": "2025-11-04",
+            "duration_ms": 271435,
+            "popularity": 66,
+            "external_urls": {
+                "spotify": "https://open.spotify.com/track/3jaeafKcSsBnhdKQz0R8cK"
+            },
+            "preview_url": null,
+            "genres": [
+                "rock"
+            ]
+        },
+        {
+            "id": "38EGs4h8GqgrS1HT344SCQ",
+            "name": "Con otra",
+            "artists": [
+                "Cazzu"
+            ],
+            "album": "Con otra",
+            "album_id": "2waOhmvYhyi4AAlS3mLLaD",
+            "label": "DALE PLAY Records / RIMAS Entertainment LLC",
+            "release_date": "2025-03-19",
+            "duration_ms": 231016,
+            "popularity": 73,
+            "external_urls": {
+                "spotify": "https://open.spotify.com/track/38EGs4h8GqgrS1HT344SCQ"
+            },
+            "preview_url": null,
+            "genres": [
+                "trap"
+            ]
+        },
+        {
+            "id": "6QCTo3BaEdkEp0BbbNCVIt",
+            "name": "CARENCIAS DE CORDURA",
+            "artists": [
+                "Milo j",
+                "Yami Safdie"
+            ],
+            "album": "111",
+            "album_id": "338cbfABt3duRORfvNeqLT",
+            "label": "DALE PLAY Records",
+            "release_date": "2023-11-30",
+            "duration_ms": 178105,
+            "popularity": 71,
+            "external_urls": {
+                "spotify": "https://open.spotify.com/track/6QCTo3BaEdkEp0BbbNCVIt"
+            },
+            "preview_url": null,
+            "genres": [
+                "pop"
+            ]
+        },
+        {
+            "id": "5vHWh24GAsXJ7tnIu8v7UN",
+            "name": "Por Mil Noches",
+            "artists": [
+                "Airbag"
+            ],
+            "album": "Libertad",
+            "album_id": "7GqNN5mgkE38TFBjU8vKCd",
+            "label": "DALE PLAY Records / Airbag",
+            "release_date": "2013-11-27",
+            "duration_ms": 283884,
+            "popularity": 74,
+            "external_urls": {
+                "spotify": "https://open.spotify.com/track/5vHWh24GAsXJ7tnIu8v7UN"
+            },
+            "preview_url": null,
+            "genres": [
+                "rock"
+            ]
+        },
+        {
+            "id": "6tt6JnKerLnOL0oez9QPqS",
+            "name": "OLIMPO",
+            "artists": [
+                "Milo j"
+            ],
+            "album": "166 (DELUXE) retirada",
+            "album_id": "2nDhATJ9VM5VucmhlSdPpm",
+            "label": "DALE PLAY Records",
+            "release_date": "2025-02-12",
+            "duration_ms": 169366,
+            "popularity": 75,
+            "external_urls": {
+                "spotify": "https://open.spotify.com/track/6tt6JnKerLnOL0oez9QPqS"
+            },
+            "preview_url": null,
+            "genres": [
+                "pop"
+            ]
+        },
+        {
+            "id": "1Mqfdem6pgGVoULjSkkcc9",
+            "name": "Cae el Sol",
+            "artists": [
+                "Airbag"
+            ],
+            "album": "Voragine",
+            "album_id": "1c8Y21uTjEJCeEjaPSA92f",
+            "label": "DALE PLAY Records / Airbag",
+            "release_date": "2011-05-01",
+            "duration_ms": 281386,
+            "popularity": 70,
+            "external_urls": {
+                "spotify": "https://open.spotify.com/track/1Mqfdem6pgGVoULjSkkcc9"
+            },
+            "preview_url": null,
+            "genres": [
+                "rock"
+            ]
+        },
+        {
+            "id": "7MmrcXVA7A5zZ2CbDuGHNa",
+            "name": "A Mí",
+            "artists": [
+                "Rels B"
+            ],
+            "album": "A Mí",
+            "album_id": "3tc9WifLZvWKnoWzLPmaeO",
+            "label": "DALE PLAY Records / Flakk Team",
+            "release_date": "2019-02-21",
+            "duration_ms": 209680,
+            "popularity": 80,
+            "external_urls": {
+                "spotify": "https://open.spotify.com/track/7MmrcXVA7A5zZ2CbDuGHNa"
+            },
+            "preview_url": null,
+            "genres": [
+                "pop"
+            ]
+        },
+        {
+            "id": "03IpZ9yqJlo3EIgDQUgBSF",
+            "name": "Nueva Era",
+            "artists": [
+                "Duki",
+                "Myke Towers"
+            ],
+            "album": "AMERI",
+            "album_id": "3rVk419T7ct4qoW52h2q2d",
+            "label": "DALE PLAY Records / SSJ Records",
+            "release_date": "2024-10-31",
+            "duration_ms": 217547,
+            "popularity": 75,
+            "external_urls": {
+                "spotify": "https://open.spotify.com/track/03IpZ9yqJlo3EIgDQUgBSF"
+            },
+            "preview_url": null,
+            "genres": [
+                "trap"
+            ]
+        },
+        {
+            "id": "17vFIehhv8hKSXYn5Ce4Pk",
+            "name": "Te invito a bailar",
+            "artists": [
+                "Callejero Fino",
+                "La T y La M"
+            ],
+            "album": "Te invito a bailar",
+            "album_id": "1iV0l1bqtzcGDWkHDYHrDA",
+            "label": "DALE PLAY Records",
+            "release_date": "2025-03-27",
+            "duration_ms": 145191,
+            "popularity": 64,
+            "external_urls": {
+                "spotify": "https://open.spotify.com/track/17vFIehhv8hKSXYn5Ce4Pk"
+            },
+            "preview_url": null,
+            "genres": [
+                "trap"
+            ]
+        },
+        {
+            "id": "0aPs3kmiqmt9QG7gWXdefA",
+            "name": "No soy Eterno",
+            "artists": [
+                "Bizarrap",
+                "Milo j"
+            ],
+            "album": "en dormir sin Madrid",
+            "album_id": "4NMv3cMkDwkkR6EdLloQDB",
+            "label": "DALE PLAY Records",
+            "release_date": "2023-10-04",
+            "duration_ms": 151468,
+            "popularity": 76,
+            "external_urls": {
+                "spotify": "https://open.spotify.com/track/0aPs3kmiqmt9QG7gWXdefA"
+            },
+            "preview_url": null,
+            "genres": [
+                "pop"
+            ]
+        },
+        {
+            "id": "2F6PBqz7aPA7K309aFKMHt",
+            "name": "Con Otra",
+            "artists": [
+                "Cazzu"
+            ],
+            "album": "Latinaje",
+            "album_id": "6ilEhVQVT7DnbBjDMBnzNs",
+            "label": "DALE PLAY Records / RIMAS Entertainment LLC",
+            "release_date": "2025-04-24",
+            "duration_ms": 231016,
+            "popularity": 75,
+            "external_urls": {
+                "spotify": "https://open.spotify.com/track/2F6PBqz7aPA7K309aFKMHt"
+            },
+            "preview_url": null,
+            "genres": [
+                "trap"
+            ]
+        },
+        {
+            "id": "2tTmW7RDtMQtBk7m2rYeSw",
+            "name": "Quevedo: Bzrp Music Sessions, Vol. 52/66",
+            "artists": [
+                "Bizarrap",
+                "Quevedo"
+            ],
+            "album": "Quevedo: Bzrp Music Sessions, Vol. 52/66",
+            "album_id": "4PNqWiJAfjj32hVvlchV5u",
+            "label": "DALE PLAY Records",
+            "release_date": "2022-07-06",
+            "duration_ms": 198937,
+            "popularity": 81,
+            "external_urls": {
+                "spotify": "https://open.spotify.com/track/2tTmW7RDtMQtBk7m2rYeSw"
+            },
+            "preview_url": null,
+            "genres": [
+                "pop"
+            ]
+        },
+        {
+            "id": "5AGnkbWCiF9u4ra54N9X1a",
+            "name": "Luck Ra: Bzrp Music Sessions, Vol. 61/66",
+            "artists": [
+                "Bizarrap",
+                "Luck Ra"
+            ],
+            "album": "Luck Ra: Bzrp Music Sessions, Vol. 61/66",
+            "album_id": "7HEU1uhs82x9hvNHOJrMKX",
+            "label": "DALE PLAY Records",
+            "release_date": "2024-12-27",
+            "duration_ms": 170953,
+            "popularity": 72,
+            "external_urls": {
+                "spotify": "https://open.spotify.com/track/5AGnkbWCiF9u4ra54N9X1a"
+            },
+            "preview_url": null,
+            "genres": [
+                "pop"
+            ]
+        },
+        {
+            "id": "0qDqdzfkWlI3GxTOKyeV1E",
+            "name": "El Problema Del Amor",
+            "artists": [
+                "Tan Bionica"
+            ],
+            "album": "El Regreso",
+            "album_id": "13P9Qaty5SUmKgpSvpbOYt",
+            "label": "DALE PLAY Records",
+            "release_date": "2025-11-04",
+            "duration_ms": 220240,
+            "popularity": 65,
+            "external_urls": {
+                "spotify": "https://open.spotify.com/track/0qDqdzfkWlI3GxTOKyeV1E"
+            },
+            "preview_url": null,
+            "genres": [
+                "rock"
+            ]
+        },
+        {
+            "id": "4581iSIX0QZNNzAQRysF3k",
+            "name": "Nunca Lo Olvides",
+            "artists": [
+                "Airbag"
+            ],
+            "album": "El Club de la Pelea I",
+            "album_id": "2tS4bTMTcGhnQSFp4rmflf",
+            "label": "DALE PLAY Records",
+            "release_date": "2025-05-28",
+            "duration_ms": 299810,
+            "popularity": 68,
+            "external_urls": {
+                "spotify": "https://open.spotify.com/track/4581iSIX0QZNNzAQRysF3k"
+            },
+            "preview_url": null,
+            "genres": [
+                "rock"
+            ]
+        },
+        {
+            "id": "47cd5P6Tbh8qO7mJNgZWg5",
+            "name": "Cuantas Veces",
+            "artists": [
+                "Oses"
+            ],
+            "album": "Cuantas Veces",
+            "album_id": "5p7yLw5eNebpcu75KYsWCg",
+            "label": "DalePlay",
+            "release_date": "2023-02-20",
+            "duration_ms": 150954,
+            "popularity": 0,
+            "external_urls": {
+                "spotify": "https://open.spotify.com/track/47cd5P6Tbh8qO7mJNgZWg5"
+            },
+            "preview_url": null,
+            "genres": [
+                "pop"
+            ]
+        }
+    ]
+}
