@@ -35,6 +35,7 @@ function normalizeString(str: string): string {
 
 /**
  * Verifica si un track coincide con un género específico
+ * Usa coincidencia parcial: "trap" coincide con "argentina trap", "trap latino", etc.
  */
 function matchesGenre(track: TrackFromDB, genre?: string): boolean {
   if (!genre) return true // Si no hay filtro de género, aceptar todos
@@ -42,7 +43,13 @@ function matchesGenre(track: TrackFromDB, genre?: string): boolean {
   const normalizedGenre = normalizeString(genre)
   const trackGenres = track.genres || []
   
-  return trackGenres.some(g => normalizeString(g) === normalizedGenre)
+  // Coincidencia parcial: el género buscado debe estar contenido en alguno de los géneros del track
+  // o viceversa (género del track contenido en el buscado)
+  return trackGenres.some(g => {
+    const normalizedTrackGenre = normalizeString(g)
+    // Coincide si el género buscado está en el género del track o viceversa
+    return normalizedTrackGenre.includes(normalizedGenre) || normalizedGenre.includes(normalizedTrackGenre)
+  })
 }
 
 /**
