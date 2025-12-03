@@ -46,11 +46,13 @@ export function detectArtistFromPrompt(
  * Detecta múltiples artistas mencionados en un prompt
  * @param prompt - Texto del prompt del usuario
  * @param availableArtists - Lista de artistas disponibles en el catálogo
- * @returns Array de nombres de artistas detectados
+ * @param maxArtists - Máximo número de artistas a detectar (por defecto: 10)
+ * @returns Array de nombres de artistas detectados (máximo maxArtists)
  */
 export function detectArtistsFromPrompt(
   prompt: string,
-  availableArtists: string[]
+  availableArtists: string[],
+  maxArtists: number = 10
 ): string[] {
   const normalizedPrompt = prompt.toLowerCase().trim()
   const detectedArtists: string[] = []
@@ -61,8 +63,13 @@ export function detectArtistsFromPrompt(
     normalized: artist.toLowerCase().trim()
   }))
   
-  // Buscar todas las coincidencias
+  // Buscar todas las coincidencias hasta alcanzar el máximo
   for (const artist of normalizedArtists) {
+    // Si ya alcanzamos el máximo, salir
+    if (detectedArtists.length >= maxArtists) {
+      break
+    }
+    
     // Coincidencia exacta
     if (normalizedPrompt === artist.normalized) {
       if (!detectedArtists.includes(artist.original)) {
