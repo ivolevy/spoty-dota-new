@@ -2,8 +2,9 @@ import { NextRequest, NextResponse } from "next/server"
 import { cookies } from "next/headers"
 import { extractDurationAndCalculateTracks } from "@/lib/openai"
 import { selectTracksWithOpenAI } from "@/lib/openai-track-selection"
-import { searchTracksFromDB } from "@/lib/search-tracks-from-db"
+import { searchTracksFromDB, getAllArtistsFromDB } from "@/lib/search-tracks-from-db"
 import { detectGenreFromPrompt } from "@/lib/detect-genre"
+import { detectArtistsFromPrompt } from "@/lib/detect-artist"
 
 // Forzar renderizado dinámico para evitar ejecución durante el build
 export const dynamic = 'force-dynamic'
@@ -58,13 +59,22 @@ export async function POST(request: NextRequest) {
       console.log(`🎵 Género detectado en el prompt: ${detectedGenre}`)
     }
 
+    // 3.6. Detectar artistas en el prompt
+    const availableArtists = await getAllArtistsFromDB()
+    const detectedArtists = detectArtistsFromPrompt(prompt.trim(), availableArtists)
+    if (detectedArtists.length > 0) {
+      console.log(`🎤 Artistas detectados en el prompt: ${detectedArtists.join(", ")}`)
+    }
+
     // 4. OPENAI SELECCIONA TRACKS ESPECÍFICOS (0 requests a Spotify)
     const genreInfo = detectedGenre ? ` (género: ${detectedGenre})` : ""
-    console.log(`🤖 OpenAI seleccionando ${maxTracksNeeded} canciones del label Dale Play Records${genreInfo}...`)
+    const artistInfo = detectedArtists.length > 0 ? ` (artistas: ${detectedArtists.join(", ")})` : ""
+    console.log(`🤖 OpenAI seleccionando ${maxTracksNeeded} canciones del label Dale Play Records${genreInfo}${artistInfo}...`)
     const selection = await selectTracksWithOpenAI(
       prompt.trim(),
       "Dale Play Records",
-      maxTracksNeeded
+      maxTracksNeeded,
+      detectedArtists.length > 0 ? detectedArtists : undefined
     )
 
     if (!selection.tracks || selection.tracks.length === 0) {

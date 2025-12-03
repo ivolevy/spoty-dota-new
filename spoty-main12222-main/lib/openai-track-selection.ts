@@ -61,7 +61,8 @@ async function getAvailableTracks(): Promise<{ trackName: string; artistName: st
 export async function selectTracksWithOpenAI(
   userPrompt: string,
   labelName: string,
-  maxTracks: number
+  maxTracks: number,
+  preferredArtists?: string[]
 ): Promise<TrackSelectionResult> {
   const OPENAI_API_KEY = process.env.OPENAI_API_KEY
   if (!OPENAI_API_KEY) {

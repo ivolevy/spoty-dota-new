@@ -259,3 +259,47 @@ export async function getAllTracksFromDB(): Promise<Track[]> {
   }
 }
 
+/**
+ * Obtiene todos los artistas únicos disponibles en la base de datos
+ */
+export async function getAllArtistsFromDB(): Promise<string[]> {
+  try {
+    const { data, error } = await supabaseData
+      .from('artist_tracks')
+      .select('artist_main, artists')
+
+    if (error) {
+      console.error('Error obteniendo artistas de DB:', error)
+      return []
+    }
+
+    if (!data || data.length === 0) {
+      return []
+    }
+
+    // Extraer artistas únicos
+    const artistsSet = new Set<string>()
+    
+    for (const track of data) {
+      // Agregar artista principal si existe
+      if (track.artist_main && typeof track.artist_main === 'string') {
+        artistsSet.add(track.artist_main.trim())
+      }
+      
+      // Agregar todos los artistas del array si existe
+      if (track.artists && Array.isArray(track.artists)) {
+        track.artists.forEach((artist: string) => {
+          if (artist && typeof artist === 'string') {
+            artistsSet.add(artist.trim())
+          }
+        })
+      }
+    }
+
+    return Array.from(artistsSet).sort()
+  } catch (error) {
+    console.error('Error obteniendo todos los artistas:', error)
+    return []
+  }
+}
+
