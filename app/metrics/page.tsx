@@ -5,7 +5,9 @@ import { useRouter } from "next/navigation"
 import { 
   ArrowLeft, Music, Loader2, LogOut, ChevronDown, ListMusic, 
   BarChart3, Users, Clock, Disc3, TrendingUp, Award, 
-  PieChart, Activity, Calendar, Headphones, Mic2, Album, Mail, Send, X
+  PieChart, Activity, Calendar, Headphones, Mic2, Album, Mail, Send, X,
+  DollarSign, Target, AlertTriangle, Zap, TrendingDown, DollarSign as Money,
+  ArrowUpRight, ArrowDownRight, Sparkles, AlertCircle
 } from "lucide-react"
 import { ParticlesBackground } from "@/components/particles-background"
 import { useSpotifyAuth } from "@/hooks/use-spotify-auth"
@@ -100,6 +102,8 @@ export default function MetricsPage() {
   const [sendingEmail, setSendingEmail] = useState(false)
   const [exposureMetrics, setExposureMetrics] = useState<ExposureMetrics | null>(null)
   const [loadingExposure, setLoadingExposure] = useState(false)
+  const [businessMetrics, setBusinessMetrics] = useState<any>(null)
+  const [loadingBusiness, setLoadingBusiness] = useState(false)
   const { isAuthenticated, isLoading, user, logout } = useSpotifyAuth()
   const router = useRouter()
 
@@ -112,6 +116,7 @@ export default function MetricsPage() {
     if (isAuthenticated) {
       fetchAllData()
       fetchExposureMetrics()
+      fetchBusinessMetrics()
     }
   }, [isAuthenticated, isLoading])
 
@@ -132,6 +137,26 @@ export default function MetricsPage() {
       console.error("Error obteniendo métricas de exposición:", error)
     } finally {
       setLoadingExposure(false)
+    }
+  }
+
+  const fetchBusinessMetrics = async () => {
+    try {
+      setLoadingBusiness(true)
+      const response = await fetch("/api/metrics/business", {
+        credentials: "include",
+      })
+
+      if (response.ok) {
+        const data = await response.json()
+        if (data.success && data.metrics) {
+          setBusinessMetrics(data.metrics)
+        }
+      }
+    } catch (error) {
+      console.error("Error obteniendo métricas de negocio:", error)
+    } finally {
+      setLoadingBusiness(false)
     }
   }
 
