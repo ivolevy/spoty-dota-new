@@ -1206,12 +1206,6 @@ export default function MetricsPage() {
             </Tabs>
           )}
                 <MetricCard 
-                  icon={<Disc3 className="w-5 h-5" />}
-                  label="Playlists"
-                  value={metrics.totalPlaylists}
-                  color="#1DB954"
-                />
-                <MetricCard 
                   icon={<Music className="w-5 h-5" />}
                   label="Total Tracks"
                   value={metrics.totalTracks}
