@@ -215,14 +215,76 @@ export async function selectTracksWithOpenAI(
     throw new Error("No hay tracks disponibles en el catálogo")
   }
 
+  // Detectar géneros disponibles en el catálogo y calcular distribución ideal
+  const detectAvailableGenres = (tracks: { genres: string[] }[]): Map<string, number> => {
+    const genreCounts = new Map<string, number>()
+    
+    tracks.forEach(track => {
+      track.genres.forEach(genre => {
+        const normalized = normalizeString(genre)
+        // Categorizar géneros en grupos principales
+        let category = "other"
+        if (normalized.includes("trap") || normalized.includes("rap") || normalized.includes("urbano")) {
+          category = "trap"
+        } else if (normalized.includes("rock")) {
+          category = "rock"
+        } else if (normalized.includes("pop") || normalized.includes("balada")) {
+          category = "pop"
+        }
+        
+        genreCounts.set(category, (genreCounts.get(category) || 0) + 1)
+      })
+    })
+    
+    return genreCounts
+  }
+
+  const availableGenres = detectAvailableGenres(availableTracks)
+  const genreDistribution = new Map<string, number>()
+  
+  // Calcular distribución ideal cuando NO hay filtro de género
+  if (!genreFilter && availableGenres.size > 0) {
+    const totalGenres = Array.from(availableGenres.values()).reduce((a, b) => a + b, 0)
+    const targetTracksPerGenre = Math.ceil(maxTracks / availableGenres.size)
+    
+    availableGenres.forEach((count, genre) => {
+      // Porcentaje ideal basado en disponibilidad y balance equitativo
+      const availabilityRatio = count / totalGenres
+      const balancedRatio = 1 / availableGenres.size // Balance equitativo
+      const idealRatio = (availabilityRatio + balancedRatio) / 2 // Promedio entre disponibilidad y balance
+      genreDistribution.set(genre, Math.ceil(maxTracks * idealRatio))
+    })
+    
+    console.log(`🎵 Balance de géneros detectado:`, Object.fromEntries(genreDistribution))
+    console.log(`   Disponibles:`, Object.fromEntries(availableGenres))
+  }
+
   // Sistema de scoring/ranking para priorizar tracks más relevantes
   interface ScoredTrack {
     track: { trackName: string; artistName: string; genres: string[] }
     score: number
+    genreCategory?: string
+  }
+
+  const getGenreCategory = (genres: string[]): string => {
+    for (const genre of genres) {
+      const normalized = normalizeString(genre)
+      if (normalized.includes("trap") || normalized.includes("rap") || normalized.includes("urbano")) {
+        return "trap"
+      }
+      if (normalized.includes("rock")) {
+        return "rock"
+      }
+      if (normalized.includes("pop") || normalized.includes("balada")) {
+        return "pop"
+      }
+    }
+    return "other"
   }
 
   const scoredTracks: ScoredTrack[] = availableTracks.map(track => {
     let score = 0
+    const genreCategory = getGenreCategory(track.genres)
     
     // Match con género detectado: +10 puntos
     if (genreFilter && track.genres.some(g => {
@@ -249,7 +311,7 @@ export async function selectTracksWithOpenAI(
       score += 2
     }
     
-    return { track, score }
+    return { track, score, genreCategory }
   })
 
   // Ordenar por score descendente y tomar top 250 (balance entre relevancia y variedad)
@@ -312,6 +374,27 @@ IMPORTANTE: Si el usuario menciona artistas específicos, prioriza canciones de 
 Puedes incluir canciones de otros artistas también, pero asegúrate de incluir varias canciones de los artistas mencionados.`
     : ""
 
+  // Instrucciones de balance de géneros cuando NO hay filtro específico
+  const genreBalanceInstruction = !genreFilter && genreDistribution.size > 0
+    ? `\n\n🎵 BALANCE DE GÉNEROS REQUERIDO (NO hay filtro de género específico):
+El usuario NO especificó un género, por lo tanto DEBES balancear equitativamente los géneros disponibles.
+
+DISTRIBUCIÓN IDEAL DE GÉNEROS PARA ESTA PLAYLIST:
+${Array.from(genreDistribution.entries()).map(([genre, target]) => {
+  const genreName = genre === "trap" ? "TRAP (música urbana, trap latino, rap)" :
+                   genre === "rock" ? "ROCK (rock argentino, rock nacional)" :
+                   genre === "pop" ? "POP (pop latino, pop urbano, baladas)" :
+                   genre.toUpperCase()
+  return `- ${genreName}: aproximadamente ${target} canciones`
+}).join("\n")}
+
+IMPORTANTE: 
+- Distribuye los géneros de manera EQUITATIVA en toda la playlist
+- NO concentres todos los tracks de un género al inicio o al final
+- Intercala géneros para crear variedad y mantener el interés
+- Si hay ${maxTracks} canciones totales, asegúrate de que la distribución se acerque a los números indicados arriba`
+    : ""
+
   const systemMessage = `Eres un curador de música para un sello discográfico. Tu objetivo es crear playlists que promocionen el catálogo completo de manera equitativa, asegurando que todos los artistas y tracks tengan exposición.
 
 REGLAS CRÍTICAS:
@@ -324,7 +407,7 @@ OBJETIVOS DE PROMOCIÓN DEL SELLO:
 - Distribuye equitativamente entre TODOS los artistas del catálogo cuando sea posible
 - Prioriza artistas con menos exposición cuando sea posible
 - Varía entre tracks populares y emergentes
-- Balancea géneros si no hay filtro específico
+- Balancea géneros EQUITATIVAMENTE si no hay filtro específico de género
 
 GÉNEROS EN EL CATÁLOGO:
 - TRAP: Música urbana, trap latino, rap
@@ -336,10 +419,21 @@ ESTRUCTURA DE PLAYLIST:
 - Desarrollo: Varía la energía y mantén el interés
 - Cierre: Canciones memorables que dejen buena impresión
 
-Si el usuario pide un género específico, prioriza canciones de ese género pero también incluye variedad.${artistInstruction}`
+Si el usuario pide un género específico, prioriza canciones de ese género pero también incluye variedad.${artistInstruction}${genreBalanceInstruction}`
 
   const artistTaskInstruction = preferredArtists && preferredArtists.length > 0
     ? `\n- PRIORIDAD: El usuario mencionó los siguientes artistas: ${preferredArtists.join(", ")}. Incluye varias canciones de estos artistas en la playlist.`
+    : ""
+
+  const genreBalanceTask = !genreFilter && genreDistribution.size > 0
+    ? `\n\n🎵 BALANCE DE GÉNEROS (CRÍTICO):
+Como NO hay filtro de género específico, DEBES balancear equitativamente los géneros:
+${Array.from(genreDistribution.entries()).map(([genre, target]) => {
+  const genreName = genre === "trap" ? "TRAP" : genre === "rock" ? "ROCK" : genre === "pop" ? "POP" : genre.toUpperCase()
+  return `- ${genreName}: aproximadamente ${target} canciones`
+}).join("\n")}
+
+INTERCALA géneros a lo largo de la playlist (no los agrupes todos juntos).`
     : ""
 
   const userMessage = `PROMPT DEL USUARIO: "${userPrompt}"
@@ -355,7 +449,7 @@ INSTRUCCIONES DE SELECCIÓN:
 - Varía los artistas para tener diversidad y promocionar todo el catálogo cuando sea posible
 - Crea un flujo musical coherente: inicio → desarrollo → cierre
 - Si el usuario pide un género, prioriza ese género pero incluye variedad
-- Si el usuario pide artistas específicos, prioriza esos artistas pero también incluye otros${artistTaskInstruction}
+- Si el usuario pide artistas específicos, prioriza esos artistas pero también incluye otros${artistTaskInstruction}${genreBalanceTask}
 
 IMPORTANTE: 
 - Separa los campos con "|" cuando copies del catálogo
