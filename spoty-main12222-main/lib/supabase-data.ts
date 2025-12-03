@@ -8,8 +8,15 @@ import { createClient, SupabaseClient } from '@supabase/supabase-js'
 
 // Función para obtener las variables de entorno en tiempo de ejecución
 function getSupabaseDataConfig() {
-  const supabaseUrl = process.env.SUPABASE_URL || ''
-  const supabaseAnonKey = process.env.SUPABASE_ANON_KEY || ''
+  // Leer directamente de process.env en tiempo de ejecución
+  const supabaseUrl = (process.env.SUPABASE_URL || '').trim()
+  const supabaseAnonKey = (process.env.SUPABASE_ANON_KEY || '').trim()
+  
+  // Debug: mostrar valores RAW antes de procesar
+  console.log('🔍 [Supabase Data Config RAW]:')
+  console.log('   - process.env.SUPABASE_URL:', process.env.SUPABASE_URL)
+  console.log('   - process.env.SUPABASE_ANON_KEY:', process.env.SUPABASE_ANON_KEY ? `${process.env.SUPABASE_ANON_KEY.substring(0, 30)}...` : 'undefined')
+  console.log('   - Todas las vars que empiezan con SUPABASE:', Object.keys(process.env).filter(k => k.includes('SUPABASE')))
   
   return { supabaseUrl, supabaseAnonKey }
 }
