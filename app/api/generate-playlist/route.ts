@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server"
 import { cookies } from "next/headers"
 import { extractDurationAndCalculateTracks } from "@/lib/openai"
 import { selectTracksWithOpenAI } from "@/lib/openai-track-selection"
-import { searchTracksFromJSON } from "@/lib/search-tracks-from-json"
+import { searchTracksFromDB } from "@/lib/search-tracks-from-db"
 import { detectGenreFromPrompt } from "@/lib/detect-genre"
 
 // Forzar renderizado dinámico para evitar ejecución durante el build
@@ -14,9 +14,9 @@ export const maxDuration = 300
 /**
  * API Route para generar playlist usando OpenAI
  * 
- * FLUJO OPTIMIZADO CON JSON:
+ * FLUJO OPTIMIZADO CON BASE DE DATOS:
  * 1. OpenAI selecciona tracks específicos basado en el prompt
- * 2. Buscamos esos tracks en tracks.json (0 requests a Spotify)
+ * 2. Buscamos esos tracks en Supabase (0 requests a Spotify)
  * 3. Retornamos tracks encontrados
  * 
  * Esto elimina completamente el consumo de la API de Spotify
@@ -74,8 +74,8 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    // 5. BUSCAR TRACKS EN EL JSON (0 requests a Spotify)
-    console.log(`📦 Buscando ${selection.tracks.length} canciones específicas en tracks.json...`)
+    // 5. BUSCAR TRACKS EN LA BASE DE DATOS (0 requests a Spotify)
+    console.log(`📦 Buscando ${selection.tracks.length} canciones específicas en Supabase...`)
     
     // Validar y preparar queries
     const trackQueries = selection.tracks
@@ -108,13 +108,13 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    // Buscar tracks en el JSON (sin requests a Spotify), filtrado por género si se detectó
-    const tracks = await searchTracksFromJSON(trackQueries, detectedGenre || undefined)
+    // Buscar tracks en la base de datos (sin requests a Spotify), filtrado por género si se detectó
+    const tracks = await searchTracksFromDB(trackQueries, detectedGenre || undefined)
 
     if (tracks.length === 0) {
       return NextResponse.json(
         {
-          error: "No se encontraron las canciones seleccionadas en tracks.json. Intenta con otro prompt.",
+          error: "No se encontraron las canciones seleccionadas en la base de datos. Intenta con otro prompt.",
           selectedTracks: selection.tracks.map(t => `${t.trackName} - ${t.artistName}`),
         },
         { status: 404 }
@@ -126,8 +126,8 @@ export async function POST(request: NextRequest) {
     console.log(`📊 RESUMEN:`)
     console.log(`   - Género detectado: ${detectedGenre || "ninguno"}`)
     console.log(`   - Tracks sugeridos por OpenAI: ${selection.tracks.length}`)
-    console.log(`   - Tracks encontrados en JSON: ${tracks.length}`)
-    console.log(`   - Requests a Spotify API: 0 (usando tracks.json)`)
+    console.log(`   - Tracks encontrados en DB: ${tracks.length}`)
+    console.log(`   - Requests a Spotify API: 0 (usando Supabase)`)
     
     return NextResponse.json({
       success: true,

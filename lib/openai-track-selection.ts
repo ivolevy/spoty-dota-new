@@ -1,10 +1,9 @@
 /**
- * Función para que OpenAI seleccione canciones del catálogo REAL de tracks.json
+ * Función para que OpenAI seleccione canciones del catálogo REAL de la base de datos
  * OpenAI recibe la lista completa de tracks y elige de ahí.
  */
 
-import { readFileSync } from "fs"
-import { join } from "path"
+import { supabaseData } from "./supabase-data"
 
 export interface SelectedTrack {
   trackName: string
@@ -18,29 +17,40 @@ export interface TrackSelectionResult {
   tracks: SelectedTrack[]
 }
 
-interface TrackFromJSON {
-  id: string
+interface TrackFromDB {
+  spotify_id: string
   name: string
   artists: string[]
-  genres?: string[]
+  artist_main: string | null
+  genres: string[] | null
 }
 
 /**
- * Carga los tracks del JSON y los formatea para OpenAI
+ * Carga los tracks de la base de datos y los formatea para OpenAI
  */
-function getAvailableTracks(): { trackName: string; artistName: string; genres: string[] }[] {
+async function getAvailableTracks(): Promise<{ trackName: string; artistName: string; genres: string[] }[]> {
   try {
-    const filePath = join(process.cwd(), "tracks.json")
-    const fileContent = readFileSync(filePath, "utf-8")
-    const data = JSON.parse(fileContent)
-    
-    return data.tracks.map((track: TrackFromJSON) => ({
+    const { data, error } = await supabaseData
+      .from('artist_tracks')
+      .select('spotify_id, name, artists, artist_main, genres')
+
+    if (error) {
+      console.error("Error cargando tracks de DB:", error)
+      return []
+    }
+
+    if (!data || data.length === 0) {
+      console.warn("No se encontraron tracks en la base de datos")
+      return []
+    }
+
+    return data.map((track: TrackFromDB) => ({
       trackName: track.name,
-      artistName: track.artists[0] || "Unknown",
+      artistName: track.artist_main || track.artists?.[0] || "Unknown",
       genres: track.genres || []
     }))
   } catch (error) {
-    console.error("Error cargando tracks.json:", error)
+    console.error("Error obteniendo tracks de DB:", error)
     return []
   }
 }
@@ -58,8 +68,8 @@ export async function selectTracksWithOpenAI(
     throw new Error("OPENAI_API_KEY no está configurada")
   }
 
-  // Obtener catálogo REAL de tracks
-  const availableTracks = getAvailableTracks()
+  // Obtener catálogo REAL de tracks desde la base de datos
+  const availableTracks = await getAvailableTracks()
   
   if (availableTracks.length === 0) {
     throw new Error("No hay tracks disponibles en el catálogo")
