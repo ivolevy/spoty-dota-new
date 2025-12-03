@@ -255,6 +255,7 @@ export async function GET(request: NextRequest) {
       releaseDate: string | null
       isNew: boolean
       playlistFollowersMap?: Map<string, number> // Temporal para cálculo
+      playlistIds?: Set<string> // Temporal para contar playlists únicas
     }>()
 
     playlistTracksData.forEach(pt => {
@@ -272,6 +273,8 @@ export async function GET(request: NextRequest) {
 
         const playlistFollowersMap = new Map<string, number>()
         playlistFollowersMap.set(pt.playlistId, pt.playlistFollowers)
+        const playlistIds = new Set<string>()
+        playlistIds.add(pt.playlistId)
 
         trackROI.set(pt.trackId, {
           id: pt.trackId,
@@ -283,32 +286,42 @@ export async function GET(request: NextRequest) {
           playlistsCount: 1,
           releaseDate,
           isNew,
-          playlistFollowersMap
+          playlistFollowersMap,
+          playlistIds
         })
       } else {
         existing.frequency++
         // Solo contar followers únicos por playlist (el máximo)
         const playlistFollowersMap = existing.playlistFollowersMap || new Map()
+        const playlistIds = existing.playlistIds || new Set()
+        
         const currentFollowers = playlistFollowersMap.get(pt.playlistId) || 0
         if (pt.playlistFollowers > currentFollowers) {
           existing.totalFollowersReached = existing.totalFollowersReached - currentFollowers + pt.playlistFollowers
           playlistFollowersMap.set(pt.playlistId, pt.playlistFollowers)
         }
+        
         // Actualizar playlistsCount si es una playlist nueva
-        if (!playlistFollowersMap.has(pt.playlistId)) {
-          existing.playlistsCount++
-          playlistFollowersMap.set(pt.playlistId, pt.playlistFollowers)
+        if (!playlistIds.has(pt.playlistId)) {
+          playlistIds.add(pt.playlistId)
+          existing.playlistsCount = playlistIds.size
+          if (!playlistFollowersMap.has(pt.playlistId)) {
+            playlistFollowersMap.set(pt.playlistId, pt.playlistFollowers)
+          }
         }
+        
         existing.playlistFollowersMap = playlistFollowersMap
+        existing.playlistIds = playlistIds
         existing.avgFollowersPerAppearance = existing.frequency > 0
           ? Math.round(existing.totalFollowersReached / existing.frequency)
           : 0
       }
     })
 
-    // Limpiar playlistFollowersMap antes de retornar
+    // Limpiar campos temporales antes de retornar
     trackROI.forEach((track) => {
       delete track.playlistFollowersMap
+      delete track.playlistIds
     })
 
     // Tracks que nunca aparecieron (dinero desperdiciado)
