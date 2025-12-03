@@ -64,6 +64,33 @@ interface AlbumStats {
   image: string
 }
 
+interface ExposureMetrics {
+  catalog: {
+    totalArtists: number
+    totalTracks: number
+  }
+  exposure: {
+    artistsAppeared: number
+    artistsNotAppeared: number
+    artistsExposureRate: number
+    tracksAppeared: number
+    tracksNotAppeared: number
+    tracksExposureRate: number
+  }
+  distribution: {
+    topArtists: Array<{ name: string; appeared: boolean; frequency: number }>
+    artistsWithNoExposure: string[]
+    topTracks: Array<{ id: string; name: string; artist: string; appeared: boolean; frequency: number }>
+    tracksWithNoExposure: Array<{ id: string; name: string; artist: string }>
+  }
+  rotation: {
+    avgTracksPerArtist: number
+    avgFrequencyPerTrack: number
+    mostUsedTrack: { id: string; name: string; artist: string; frequency: number } | null
+    leastUsedArtists: Array<{ name: string; frequency: number }>
+  }
+}
+
 export default function MetricsPage() {
   const [playlists, setPlaylists] = useState<PlaylistWithTracks[]>([])
   const [loading, setLoading] = useState(true)
@@ -71,6 +98,8 @@ export default function MetricsPage() {
   const [showEmailModal, setShowEmailModal] = useState(false)
   const [emailInput, setEmailInput] = useState("")
   const [sendingEmail, setSendingEmail] = useState(false)
+  const [exposureMetrics, setExposureMetrics] = useState<ExposureMetrics | null>(null)
+  const [loadingExposure, setLoadingExposure] = useState(false)
   const { isAuthenticated, isLoading, user, logout } = useSpotifyAuth()
   const router = useRouter()
 
@@ -82,8 +111,29 @@ export default function MetricsPage() {
 
     if (isAuthenticated) {
       fetchAllData()
+      fetchExposureMetrics()
     }
   }, [isAuthenticated, isLoading])
+
+  const fetchExposureMetrics = async () => {
+    try {
+      setLoadingExposure(true)
+      const response = await fetch("/api/metrics/exposure", {
+        credentials: "include",
+      })
+
+      if (response.ok) {
+        const data = await response.json()
+        if (data.success && data.metrics) {
+          setExposureMetrics(data.metrics)
+        }
+      }
+    } catch (error) {
+      console.error("Error obteniendo métricas de exposición:", error)
+    } finally {
+      setLoadingExposure(false)
+    }
+  }
 
   const fetchAllData = async () => {
     try {
