@@ -61,7 +61,8 @@ async function getAvailableTracks(): Promise<{ trackName: string; artistName: st
 export async function selectTracksWithOpenAI(
   userPrompt: string,
   labelName: string,
-  maxTracks: number
+  maxTracks: number,
+  preferredArtists?: string[]
 ): Promise<TrackSelectionResult> {
   const OPENAI_API_KEY = process.env.OPENAI_API_KEY
   if (!OPENAI_API_KEY) {
@@ -121,6 +122,12 @@ export async function selectTracksWithOpenAI(
     }
   }
 
+  const artistInstruction = preferredArtists && preferredArtists.length > 0
+    ? `\n\nARTISTAS PREFERIDOS DEL USUARIO: ${preferredArtists.join(", ")}
+IMPORTANTE: Si el usuario menciona artistas específicos, prioriza canciones de esos artistas.
+Puedes incluir canciones de otros artistas también, pero asegúrate de incluir varias canciones de los artistas mencionados.`
+    : ""
+
   const systemMessage = `Eres un curador de música experto. Tu tarea es seleccionar canciones de un catálogo específico para crear playlists personalizadas.
 
 REGLAS CRÍTICAS:
@@ -134,7 +141,11 @@ GÉNEROS EN EL CATÁLOGO:
 - ROCK: Rock argentino, rock nacional
 - POP: Pop latino, pop urbano, baladas
 
-Si el usuario pide un género específico, prioriza canciones de ese género.`
+Si el usuario pide un género específico, prioriza canciones de ese género.${artistInstruction}`
+
+  const artistTaskInstruction = preferredArtists && preferredArtists.length > 0
+    ? `\n- PRIORIDAD: El usuario mencionó los siguientes artistas: ${preferredArtists.join(", ")}. Incluye varias canciones de estos artistas en la playlist.`
+    : ""
 
   const userMessage = `PROMPT DEL USUARIO: "${userPrompt}"
 
@@ -145,7 +156,7 @@ TAREA:
 Selecciona ${maxTracks} canciones del catálogo anterior que se ajusten al prompt del usuario.
 - Los nombres deben ser EXACTOS como aparecen arriba
 - Varía los artistas para tener diversidad
-- Si el usuario pide un género, prioriza ese género
+- Si el usuario pide un género, prioriza ese género${artistTaskInstruction}
 
 Usa la función selectPlaylistTracks para devolver las ${maxTracks} canciones.`
 

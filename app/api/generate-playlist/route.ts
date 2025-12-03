@@ -58,13 +58,22 @@ export async function POST(request: NextRequest) {
       console.log(`🎵 Género detectado en el prompt: ${detectedGenre}`)
     }
 
+    // 3.6. Detectar artistas en el prompt
+    const availableArtists = await getAllArtistsFromDB()
+    const detectedArtists = detectArtistsFromPrompt(prompt.trim(), availableArtists)
+    if (detectedArtists.length > 0) {
+      console.log(`🎤 Artistas detectados en el prompt: ${detectedArtists.join(", ")}`)
+    }
+
     // 4. OPENAI SELECCIONA TRACKS ESPECÍFICOS (0 requests a Spotify)
     const genreInfo = detectedGenre ? ` (género: ${detectedGenre})` : ""
-    console.log(`🤖 OpenAI seleccionando ${maxTracksNeeded} canciones del label Dale Play Records${genreInfo}...`)
+    const artistInfo = detectedArtists.length > 0 ? ` (artistas: ${detectedArtists.join(", ")})` : ""
+    console.log(`🤖 OpenAI seleccionando ${maxTracksNeeded} canciones del label Dale Play Records${genreInfo}${artistInfo}...`)
     const selection = await selectTracksWithOpenAI(
       prompt.trim(),
       "Dale Play Records",
-      maxTracksNeeded
+      maxTracksNeeded,
+      detectedArtists.length > 0 ? detectedArtists : undefined
     )
 
     if (!selection.tracks || selection.tracks.length === 0) {
@@ -125,6 +134,7 @@ export async function POST(request: NextRequest) {
     console.log(`✅ Playlist generada: ${selection.playlistName} con ${tracks.length} canciones`)
     console.log(`📊 RESUMEN:`)
     console.log(`   - Género detectado: ${detectedGenre || "ninguno"}`)
+    console.log(`   - Artistas detectados: ${detectedArtists.length > 0 ? detectedArtists.join(", ") : "ninguno"}`)
     console.log(`   - Tracks sugeridos por OpenAI: ${selection.tracks.length}`)
     console.log(`   - Tracks encontrados en DB: ${tracks.length}`)
     console.log(`   - Requests a Spotify API: 0 (usando Supabase)`)
@@ -135,6 +145,7 @@ export async function POST(request: NextRequest) {
       description: selection.description,
       tracks,
       detectedGenre: detectedGenre || null,
+      detectedArtists: detectedArtists.length > 0 ? detectedArtists : null,
     })
     
   } catch (error) {
