@@ -2,8 +2,9 @@ import { NextRequest, NextResponse } from "next/server"
 import { cookies } from "next/headers"
 import { extractDurationAndCalculateTracks } from "@/lib/openai"
 import { selectTracksWithOpenAI } from "@/lib/openai-track-selection"
-import { searchTracksFromDB } from "@/lib/search-tracks-from-db"
+import { searchTracksFromDB, getAllArtistsFromDB } from "@/lib/search-tracks-from-db"
 import { detectGenreFromPrompt } from "@/lib/detect-genre"
+import { detectArtistsFromPrompt } from "@/lib/detect-artist"
 
 // Forzar renderizado dinámico para evitar ejecución durante el build
 export const dynamic = 'force-dynamic'
