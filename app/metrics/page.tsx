@@ -903,7 +903,7 @@ export default function MetricsPage() {
                       <div className="rounded-xl p-6" style={{ backgroundColor: "#1a1a1a", border: "1px solid #333" }}>
                         <div className="flex items-center gap-2 mb-6">
                           <DollarSign className="w-5 h-5 text-[#22c55e]" />
-                          <h2 className="text-lg font-semibold text-white">Top 10 Tracks por ROI</h2>
+                          <h2 className="text-lg font-semibold text-white">Top 10 Tracks por Alcance</h2>
                         </div>
                         <div className="space-y-3">
                           {businessMetrics.roi.topTracksByROI.slice(0, 10).map((track: any, index: number) => (
@@ -945,7 +945,7 @@ export default function MetricsPage() {
                       <div className="rounded-xl p-6" style={{ backgroundColor: "#1a1a1a", border: "1px solid #333" }}>
                         <div className="flex items-center gap-2 mb-6">
                           <Award className="w-5 h-5 text-[#fbbf24]" />
-                          <h2 className="text-lg font-semibold text-white">Top 10 Artistas por ROI</h2>
+                          <h2 className="text-lg font-semibold text-white">Top 10 Artistas por Alcance</h2>
                         </div>
                         <div className="space-y-3">
                           {businessMetrics.roi.topArtistsByROI.slice(0, 10).map((artist: any, index: number) => (
