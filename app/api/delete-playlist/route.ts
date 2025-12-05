@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server"
 import { cookies } from "next/headers"
 import { spotifyApiRequest } from "@/lib/spotify"
 import { deletePlaylist as deletePlaylistFromDB } from "@/lib/supabase-playlists"
-import { getUserBySpotifyId } from "@/lib/supabase-data"
+import { getUserBySpotifyId } from "@/lib/supabase-users"
 
 /**
  * API Route para eliminar una playlist (dejar de seguir en Spotify y borrar de BD)
