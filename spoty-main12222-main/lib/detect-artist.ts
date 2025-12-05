@@ -91,3 +91,5 @@ export function detectArtistsFromPrompt(
   return detectedArtists
 }
 
+
+

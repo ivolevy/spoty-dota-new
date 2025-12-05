@@ -98,3 +98,5 @@ Después del redespliegue, verifica que:
 - 🔄 Después de agregar variables, siempre redesplega la aplicación
 - 📝 Puedes usar el mismo valor para ambas variantes (con y sin prefijo) si quieres
 
+
+

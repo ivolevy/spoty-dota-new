@@ -52,3 +52,5 @@ export const supabaseData = new Proxy({} as SupabaseClient, {
   }
 })
 
+
+

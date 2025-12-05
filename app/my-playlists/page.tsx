@@ -302,6 +302,54 @@ export default function MyPlaylistsPage() {
     }
   }
 
+  const handleDeletePlaylist = async (playlist: Playlist, e?: React.MouseEvent) => {
+    if (e) {
+      e.stopPropagation() // Prevenir que se abra la playlist al hacer click en el botón de borrar
+    }
+    
+    if (!confirm(`Are you sure you want to delete "${playlist.name}"? This will unfollow the playlist on Spotify and remove it from your list.`)) {
+      return
+    }
+
+    try {
+      const response = await fetch("/api/delete-playlist", {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        credentials: "include",
+        body: JSON.stringify({
+          playlistId: playlist.spotify_playlist_id,
+        }),
+      })
+
+      if (!response.ok) {
+        const errorData = await response.json()
+        throw new Error(errorData.error || "Error eliminando playlist")
+      }
+
+      // Actualizar UI - remover de la lista
+      setPlaylists(playlists.filter(p => p.id !== playlist.id))
+      
+      // Si la playlist eliminada estaba seleccionada, volver al grid
+      if (selectedPlaylist && selectedPlaylist.id === playlist.id) {
+        setSelectedPlaylist(null)
+        setPlaylistTracks([])
+      }
+
+      toast.success("Playlist deleted", {
+        description: "The playlist has been removed from Spotify and your list",
+        duration: 3000,
+      })
+    } catch (error) {
+      console.error("Error deleting playlist:", error)
+      toast.error("Couldn't delete playlist", {
+        description: error instanceof Error ? error.message : "Please try again",
+        duration: 4000,
+      })
+    }
+  }
+
   const handleDragStart = (index: number) => {
     setDraggedTrackIndex(index)
   }
@@ -891,24 +939,43 @@ export default function MyPlaylistsPage() {
                       )
                     })()}
 
-                    {/* Botón para abrir en Spotify */}
-                    <button
-                      onClick={() => window.open(selectedPlaylist.external_url, "_blank")}
-                      className="w-full mt-6 px-4 py-3 rounded-full font-medium transition-all duration-300 flex items-center justify-center gap-2"
-                      style={{
-                        backgroundColor: "#1DB954",
-                        color: "#000",
-                      }}
-                      onMouseEnter={(e) => {
-                        e.currentTarget.style.backgroundColor = "#1ed760"
-                      }}
-                      onMouseLeave={(e) => {
-                        e.currentTarget.style.backgroundColor = "#1DB954"
-                      }}
-                    >
-                      <ExternalLink size={16} />
-                      Open in Spotify
-                    </button>
+                    {/* Botones de acción */}
+                    <div className="mt-6 space-y-3">
+                      <button
+                        onClick={() => window.open(selectedPlaylist.external_url, "_blank")}
+                        className="w-full px-4 py-3 rounded-full font-medium transition-all duration-300 flex items-center justify-center gap-2"
+                        style={{
+                          backgroundColor: "#1DB954",
+                          color: "#000",
+                        }}
+                        onMouseEnter={(e) => {
+                          e.currentTarget.style.backgroundColor = "#1ed760"
+                        }}
+                        onMouseLeave={(e) => {
+                          e.currentTarget.style.backgroundColor = "#1DB954"
+                        }}
+                      >
+                        <ExternalLink size={16} />
+                        Open in Spotify
+                      </button>
+                      <button
+                        onClick={() => selectedPlaylist && handleDeletePlaylist(selectedPlaylist)}
+                        className="w-full px-4 py-3 rounded-full font-medium transition-all duration-300 flex items-center justify-center gap-2"
+                        style={{
+                          backgroundColor: "#ef4444",
+                          color: "#fff",
+                        }}
+                        onMouseEnter={(e) => {
+                          e.currentTarget.style.backgroundColor = "#dc2626"
+                        }}
+                        onMouseLeave={(e) => {
+                          e.currentTarget.style.backgroundColor = "#ef4444"
+                        }}
+                      >
+                        <Trash2 size={16} />
+                        Delete Playlist
+                      </button>
+                    </div>
                   </div>
                 </div>
 
@@ -1246,7 +1313,7 @@ export default function MyPlaylistsPage() {
                   onClick={() => handlePlaylistClick(playlist)}
                 >
                   {/* Playlist Image */}
-                  <div className="relative mb-3 aspect-square rounded-lg overflow-hidden shadow-lg">
+                  <div className="relative mb-3 aspect-square rounded-lg overflow-hidden shadow-lg group/image">
                     <img
                       src={playlist.image || "/playlist.png"}
                       alt={playlist.name}
@@ -1256,6 +1323,16 @@ export default function MyPlaylistsPage() {
                         target.src = "/playlist.png"
                       }}
                     />
+                    {/* Delete Button - aparece en hover */}
+                    <button
+                      onClick={(e) => handleDeletePlaylist(playlist, e)}
+                      className="absolute top-2 right-2 p-2 rounded-full bg-black/70 hover:bg-red-500/90 transition-all duration-300 opacity-0 group-hover/image:opacity-100"
+                      style={{ color: "#fff" }}
+                      aria-label="Delete playlist"
+                      title="Delete playlist"
+                    >
+                      <Trash2 size={16} />
+                    </button>
                   </div>
 
                   {/* Playlist Info */}

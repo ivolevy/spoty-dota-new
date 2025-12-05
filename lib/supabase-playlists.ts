@@ -67,3 +67,20 @@ export async function getUserPlaylistsBySpotifyId(spotifyUserId: string) {
   // Luego obtener las playlists
   return getUserPlaylists(user.id)
 }
+
+/**
+ * Elimina una playlist de la base de datos por su spotify_playlist_id
+ */
+export async function deletePlaylist(spotifyPlaylistId: string) {
+  const { error } = await supabase
+    .from('playlists')
+    .delete()
+    .eq('spotify_playlist_id', spotifyPlaylistId)
+
+  if (error) {
+    console.error('Error eliminando playlist:', error)
+    throw error
+  }
+
+  return { success: true }
+}

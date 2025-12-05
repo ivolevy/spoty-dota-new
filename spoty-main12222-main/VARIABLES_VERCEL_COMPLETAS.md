@@ -74,3 +74,5 @@ Después del redeploy, revisa los logs en Vercel. Deberías ver:
 
 Si ves "NOT SET" o "placeholder.supabase.co", significa que las variables no están configuradas correctamente.
 
+
+
